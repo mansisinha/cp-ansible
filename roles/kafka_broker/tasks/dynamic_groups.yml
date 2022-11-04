@@ -3,6 +3,14 @@
   setup:
     filter: ansible_os_family
 
+- name: get uuid
+  shell: /usr/bin/kafka-storage  random-uuid
+  register: uuid_key
+
+- name: format meta directory
+  shell: /usr/bin/kafka-storage  format -t {{ uuid_key.stdout }} -c /etc/kafka/server.properties
+  register: format_meta
+
 - name: Load server.properties
   slurp:
     src: "{{ kafka_broker.config_file }}"
@@ -39,35 +47,41 @@
   when: installation_method == "archive"
   tags:
     - systemd
+
+
+- name: try 
+  debug:
+    msg: "{{ kafka-broker-api-versions  --bootstrap-server BROKER | grep 9092 }}"
+
 # TODO When Zookeeper is removed, use kafka-metadata-quorum script. See KIP-595
-- name: Get Controller Broker ID
-  shell: >
-    set -o pipefail &&
-      {{ binary_base_path }}/bin/zookeeper-shell {{ hostvars[groups['zookeeper'][0]] | confluent.platform.resolve_hostname }}:{{ zookeeper_client_port }}{{zookeeper_chroot}}
-          {%- if zookeeper_ssl_enabled %}
-            -zk-tls-config-file {{ kafka_broker.zookeeper_tls_client_config_file }}
-          {%- endif %}
-          get /controller | grep brokerid
-  args:
-    executable: /bin/bash
-  vars:
-    archive_version: "{{ kafka_broker_current_version | default(confluent_package_version) }}"
-  register: controller_query
-  run_once: true
-  changed_when: false
-  check_mode: false
-  diff: "{{ not mask_sensitive_diff|bool }}"
+#- name: Get Controller Broker ID
+#  shell: >
+#     set -o pipefail &&
+#       {{ binary_base_path }}/bin/zookeeper-shell {{ hostvars[groups['zookeeper'][0]] | confluent.platform.resolve_hostname }}:{{ zookeeper_client_port }}{{zookeeper_chroot}}
+#           {%- if zookeeper_ssl_enabled %}
+#             -zk-tls-config-file {{ kafka_broker.zookeeper_tls_client_config_file }}
+#           {%- endif %}
+#           get /controller | grep brokerid
+#   args:
+#     executable: /bin/bash
+#   vars:
+#     archive_version: "{{ kafka_broker_current_version | default(confluent_package_version) }}"
+#   register: controller_query
+#   run_once: true
+#   changed_when: false
+#   check_mode: false
+#   diff: "{{ not mask_sensitive_diff|bool }}"
 
-- name: Get broker_id
-  set_fact:
-    controller_json: "{{ controller_query.stdout }}"
-    broker_id: "{{ (slurped_meta_properties.content|b64decode).split('\n') | select('match', '^broker.id.*') | list \
-      | first | regex_replace('^[-a-zA-Z0-9.]*[ ]?=[ ]?(.*)$', '\\1') }}"
+# - name: Get broker_id
+#   set_fact:
+#     controller_json: "{{ controller_query.stdout }}"
+#     broker_id: "{{ (slurped_meta_properties.content|b64decode).split('\n') | select('match', '^broker.id.*') | list \
+#       | first | regex_replace('^[-a-zA-Z0-9.]*[ ]?=[ ]?(.*)$', '\\1') }}"
 
-- debug:
-    msg: "Broker ID: {{ broker_id }} and Controller ID: {{ controller_json.brokerid }}"
+# - debug:
+#     msg: "Broker ID: {{ broker_id }} and Controller ID: {{ controller_json.brokerid }}"
 
-- name: "Group Hosts by Kafka Broker Mode: Non Controller or Controller"
-  group_by:
-    key: "{{ 'kafka_broker_controller' if broker_id|int == controller_json.brokerid|int else 'kafka_broker_non_controller' }}"
-  changed_when: false
+# - name: "Group Hosts by Kafka Broker Mode: Non Controller or Controller"
+#   group_by:
+#     key: "{{ 'kafka_broker_controller' if broker_id|int == controller_json.brokerid|int else 'kafka_broker_non_controller' }}"
+#   changed_when: false

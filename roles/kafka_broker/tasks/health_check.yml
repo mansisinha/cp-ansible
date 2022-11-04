@@ -1,4 +1,8 @@
 ---
+- name: debug
+  debug:
+    msg: "{{kafka_broker_listeners}} and {{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]}}"
+
 - name: Get Topics with UnderReplicatedPartitions
   shell: |
     {{ binary_base_path }}/bin/kafka-topics --bootstrap-server {{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['port']}} \
@@ -13,7 +17,7 @@
   ignore_errors: true
   changed_when: false
   check_mode: false
-  when: not rbac_enabled|bool
+  when: not rbac_enabled|bool and inventory_hostname in groups.kafka_broker
 
 - name: Get Topics with UnderReplicatedPartitions with Secrets Protection enabled
   shell: |
