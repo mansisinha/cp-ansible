@@ -22,12 +22,12 @@
         key: kafka_controller_{{install_pattern}}
       changed_when: false
 
-- name: get properties
-  hosts: kafka_controller
-  tasks:
-    - import_role:
-        name: kafka_broker
-        tasks_from: dynamic_groups.yml
+# - name: get properties
+#   hosts: kafka_controller
+#   tasks:
+#     - import_role:
+#         name: kafka_broker
+#         tasks_from: dynamic_groups.yml
 
 - name: Kafka Controller Parallel Provisioning
   hosts: kafka_controller_parallel
@@ -38,6 +38,7 @@
     - set_fact:
         kafka_broker_custom_properties: 
           process.roles: controller
+          controller.quorum.voters: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
           listeners: CONTROLLER://:9093
           node.id: "{{ inventory_hostname[-1]|int + 9990 }}"
     - import_role:

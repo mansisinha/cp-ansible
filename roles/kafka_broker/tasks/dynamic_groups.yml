@@ -3,13 +3,13 @@
   setup:
     filter: ansible_os_family
 
-- name: get uuid
-  shell: /usr/bin/kafka-storage  random-uuid
-  register: uuid_key
+# - name: get uuid
+#   shell: /usr/bin/kafka-storage  random-uuid
+#   register: uuid_key
 
-- name: format meta directory
-  shell: /usr/bin/kafka-storage  format -t {{ uuid_key.stdout }} -c /etc/kafka/server.properties
-  register: format_meta
+# - name: format meta directory
+#   shell: /usr/bin/kafka-storage  format -t {{ uuid_key.stdout }} -c /etc/kafka/server.properties
+#   register: format_meta
 
 - name: Load server.properties
   slurp:

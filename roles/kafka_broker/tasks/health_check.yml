@@ -1,42 +1,39 @@
 ---
-- name: debug
-  debug:
-    msg: "{{kafka_broker_listeners}} and {{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]}}"
 
-- name: Get Topics with UnderReplicatedPartitions
-  shell: |
-    {{ binary_base_path }}/bin/kafka-topics --bootstrap-server {{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['port']}} \
-      --describe --under-replicated-partitions --command-config {{kafka_broker.client_config_file}}
-  environment:
-    KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
-  register: urp_topics
-  # stdout_lines will have topics with URPs and stderr has WARN and ERROR level logs
-  until: urp_topics.stdout_lines|length == 0 and 'ERROR' not in urp_topics.stderr
-  retries: 15
-  delay: 5
-  ignore_errors: true
-  changed_when: false
-  check_mode: false
-  when: not rbac_enabled|bool and inventory_hostname in groups.kafka_broker
+# - name: Get Topics with UnderReplicatedPartitions
+#   shell: |
+#     {{ binary_base_path }}/bin/kafka-topics --bootstrap-server {{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['port']}} \
+#       --describe --under-replicated-partitions --command-config {{kafka_broker.client_config_file}}
+#   environment:
+#     KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
+#   register: urp_topics
+#   # stdout_lines will have topics with URPs and stderr has WARN and ERROR level logs
+#   until: urp_topics.stdout_lines|length == 0 and 'ERROR' not in urp_topics.stderr
+#   retries: 15
+#   delay: 5
+#   ignore_errors: true
+#   changed_when: false
+#   check_mode: false
+#   when: not rbac_enabled|bool
 
-- name: Get Topics with UnderReplicatedPartitions with Secrets Protection enabled
-  shell: |
-    {{ binary_base_path }}/bin/kafka-topics --bootstrap-server {{inventory_hostname}}:{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['port']}} \
-      --describe --under-replicated-partitions --command-config {{kafka_broker.client_config_file}}
-  environment:
-    CONFLUENT_SECURITY_MASTER_KEY: "{{ secrets_protection_masterkey }}"
-    KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
-  register: urp_topics_secrets_protection
-  # stdout_lines will have topics with URPs and stderr has WARN and ERROR level logs
-  until: urp_topics_secrets_protection.stdout_lines|length == 0 and 'ERROR' not in urp_topics_secrets_protection.stderr
-  retries: 15
-  delay: 5
-  ignore_errors: true
-  changed_when: false
-  check_mode: false
-  when:
-    - kafka_broker_client_secrets_protection_enabled|bool
-    - rbac_enabled|bool
+# - name: Get Topics with UnderReplicatedPartitions with Secrets Protection enabled
+#   shell: |
+#     {{ binary_base_path }}/bin/kafka-topics --bootstrap-server {{inventory_hostname}}:{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['port']}} \
+#       --describe --under-replicated-partitions --command-config {{kafka_broker.client_config_file}}
+#   environment:
+#     CONFLUENT_SECURITY_MASTER_KEY: "{{ secrets_protection_masterkey }}"
+#     KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
+#   register: urp_topics_secrets_protection
+#   # stdout_lines will have topics with URPs and stderr has WARN and ERROR level logs
+#   until: urp_topics_secrets_protection.stdout_lines|length == 0 and 'ERROR' not in urp_topics_secrets_protection.stderr
+#   retries: 15
+#   delay: 5
+#   ignore_errors: true
+#   changed_when: false
+#   check_mode: false
+#   when:
+#     - kafka_broker_client_secrets_protection_enabled|bool
+#     - rbac_enabled|bool
 
 - name: Wait for Metadata Service to start
   uri:
@@ -58,25 +55,25 @@
     - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False)
     - not fips_enabled|bool
 
-- name: Wait for Embedded Rest Proxy to start
-  uri:
-    url: "{{kafka_broker_erp_clusters_url}}"
-    validate_certs: false
-    return_content: true
-    status_code: 200
-    url_username: "{{kafka_broker_rest_health_check_user}}"
-    url_password: "{{kafka_broker_rest_health_check_password}}"
-    force_basic_auth: true
-  register: erp_result
-  until: erp_result.status == 200
-  retries: 25
-  delay: 5
-  ignore_errors: true
-  when:
-    - kafka_broker_rest_proxy_enabled|bool
-    # Skip if any previous checks failed
-    - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False) and not mds_result.failed|default(False)
-    - not fips_enabled|bool
+# - name: Wait for Embedded Rest Proxy to start
+#   uri:
+#     url: "{{kafka_broker_erp_clusters_url}}"
+#     validate_certs: false
+#     return_content: true
+#     status_code: 200
+#     url_username: "{{kafka_broker_rest_health_check_user}}"
+#     url_password: "{{kafka_broker_rest_health_check_password}}"
+#     force_basic_auth: true
+#   register: erp_result
+#   until: erp_result.status == 200
+#   retries: 25
+#   delay: 5
+#   ignore_errors: true
+#   when:
+#     - kafka_broker_rest_proxy_enabled|bool
+#     # Skip if any previous checks failed
+#     - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False) and not mds_result.failed|default(False)
+#     - not fips_enabled|bool
 
 - name: Fetch Log Files and Error out
   block:

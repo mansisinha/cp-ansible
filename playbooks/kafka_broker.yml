@@ -28,6 +28,13 @@
   tags: kafka_broker
   environment: "{{ proxy_env }}"
   tasks:
+    # - set_fact:
+    #     kafka_broker_custom_properties:
+    #       process.roles: broker
+    #       controller.quorum.voters: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
+    #       controller.listener.names: CONTROLLER
+    #       listener.security.protocol.map: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,BROKER:PLAINTEXT
+    #       node.id: "{{ inventory_hostname[-1] }}"
     - import_role:
         name: kafka_broker
 
