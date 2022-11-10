@@ -10,6 +10,9 @@ confluent_package_debian_suffix: "{{ '=' + confluent_full_package_version if con
 confluent_common_repository_redhat_release_version: "{{ ansible_distribution_major_version if ansible_os_family == 'RedHat' else ''}}"
 confluent_common_repository_debian_release_version: "{{ansible_distribution_release if ansible_os_family == 'Debian' else ''}}"
 
+### temporary variable
+kraft_enabled: false
+
 # Deprecated, see mask_sensitive_logs
 mask_secrets: true
 
