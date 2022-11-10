@@ -57,6 +57,18 @@ platforms:
     privileged: true
     networks:
       - name: confluent
+  - name: kafka-broker2
+    hostname: kafka-broker2.confluent
+    groups:
+      - kafka_broker
+    image: geerlingguy/docker-centos8-ansible
+    dockerfile: ../Dockerfile-rhel-java17.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent
   - name: schema-registry1
     hostname: schema-registry1.confluent
     groups:
@@ -124,6 +136,7 @@ provisioner:
     group_vars:
       all:
         scenario_name: kraft-rhel
+        kraft_enabled: true
         # Kafka Rest API Basic Auth
         kafka_broker_rest_proxy_authentication_type: basic
         schema_registry_authentication_type: basic

@@ -28,15 +28,19 @@
   tags: kafka_broker
   environment: "{{ proxy_env }}"
   tasks:
-    # - set_fact:
-    #     kafka_broker_custom_properties:
-    #       process.roles: broker
-    #       controller.quorum.voters: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
-    #       controller.listener.names: CONTROLLER
-    #       listener.security.protocol.map: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,BROKER:PLAINTEXT
-    #       node.id: "{{ inventory_hostname[-1] }}"
     - import_role:
         name: kafka_broker
+
+- name: Kafka Broker Serial Provisioning
+  hosts: kafka_broker_serial
+  gather_facts: false
+  serial: 1
+  tags: kafka_broker
+  environment: "{{ proxy_env }}"
+  tasks:
+    - import_role:
+        name: kafka_broker
+      when: kraft_enabled|bool
 
 - name: Kafka Broker Serial Ordering
   hosts: kafka_broker_serial
@@ -47,6 +51,7 @@
     - import_role:
         name: kafka_broker
         tasks_from: dynamic_groups.yml
+      when: not kraft_enabled|bool
 
 - name: Kafka Broker Non Controllers Provisioning
   hosts: kafka_broker_non_controller
@@ -62,7 +67,7 @@
     - name: Proceed Prompt
       pause:
         prompt: "Press Enter to Proceed to Next Node. Ctrl + C to Abort"
-      when: kafka_broker_pause_rolling_deployment|bool
+      when: kafka_broker_pause_rolling_deployment|bool and not kraft_enabled|bool
 
 - name: Kafka Broker Controller Provisioning
   hosts: kafka_broker_controller
@@ -77,4 +82,4 @@
     - name: Proceed Prompt
       pause:
         prompt: "Press Enter to Proceed to Next Node. Ctrl + C to Abort"
-      when: kafka_broker_pause_rolling_deployment|bool
+      when: kafka_broker_pause_rolling_deployment|bool and not kraft_enabled|bool

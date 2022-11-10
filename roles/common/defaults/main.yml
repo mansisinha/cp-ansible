@@ -35,6 +35,9 @@ confluent_common_repository_redhat_clients_gpgcheck: 1
 confluent_common_repository_redhat_clients_gpgkey: "{{confluent_clients_repository_baseurl}}/clients/rpm/archive.key"
 confluent_common_repository_redhat_clients_enabled: 1
 
+### temporary variable till we have automated
+kraft_enabled: false
+
 ### Full pre-existing Java path on custom nodes. CP-Ansible will use the provided path and will skip installing java as part of execution
 custom_java_path: ""
 
