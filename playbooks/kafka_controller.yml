@@ -18,12 +18,30 @@
       vars:
         service_state: "{{ ansible_facts.services[kafka_broker_service_name + '.service'].state | default('unknown') }}"
 
+    - name: Group Hosts by Installation Pattern
+      group_by:
+        key: kafka_controller_{{install_pattern}}
+      changed_when: false
+
 - name: Kafka Controller Parallel Provisioning
-  hosts: kafka_controller
+  hosts: kafka_controller_parallel
   gather_facts: false
-  # serial: "{{ '100%' if install_pattern  == 'parallel' else '1' }}"
   tags: kafka_broker
   environment: "{{ proxy_env }}"
   tasks:
+    - set_fact:
+        kafka_broker_rest_proxy_enabled: false
+    - import_role:
+        name: kafka_broker
+
+- name: Kafka Controller Serial Provisioning
+  hosts: kafka_controller_serial
+  gather_facts: false
+  serial: 1
+  tags: kafka_broker
+  environment: "{{ proxy_env }}"
+  tasks:
+    - set_fact:
+        kafka_broker_rest_proxy_enabled: false
     - import_role:
         name: kafka_broker

@@ -143,9 +143,10 @@ kafka_broker_properties:
     properties:
       process.roles: controller
       controller.quorum.voters: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
+      controller.listener.names: CONTROLLER
+      listener.security.protocol.map: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,BROKER:PLAINTEXT
       listeners: CONTROLLER://:9093
       node.id: "{{ inventory_hostname[-1]|int + 9990 }}"
-      kafka.rest.enable: false
   broker_on_controller:
     enabled: "{{kraft_enabled|bool and inventory_hostname in groups.kafka_broker}}"
     properties:

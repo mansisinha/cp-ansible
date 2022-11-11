@@ -62,26 +62,23 @@
 - name: Check kafka-metadata-quorum
   shell: |
     echo confluent.use.controller.listener=true > /etc/kafka/tmp.properties; \ {{ binary_base_path }}/bin/kafka-metadata-quorum --bootstrap-server {{inventory_hostname}}:9093 \
-      --command-config /etc/kafka/tmp.properties describe --replication | grep 9991 | awk '{print $2}'; rm /etc/kafka/tmp.properties;
+      --command-config /etc/kafka/tmp.properties describe --replication | awk '{print $2}'; rm /etc/kafka/tmp.properties;
   register: LEO
-  failed_when: LEO.stdout|int <= 0
   ignore_errors: true
   changed_when: false
   check_mode: false
   when:
     - kraft_enabled|bool and inventory_hostname in groups.kafka_controller
 
-- name: dgu
-  debug:
-    msg: "{{LEO}}"
-
-- name: Check lag in kafka-metadata-quorum
-  shell: |
-    echo confluent.use.controller.listener=true > /etc/kafka/tmp.properties; \ {{ binary_base_path }}/bin/kafka-metadata-quorum --bootstrap-server {{ inventory_hostname }}:9093 \
-      --command-config /etc/kafka/tmp.properties describe --replication | grep 9991 | awk '{print $3}'; rm /etc/kafka/tmp.properties;
-  register: Lag
-  failed_when: Lag.stdout|int >= 1000
-  ignore_errors: true
+- name: Check LogEndOffset values
+  assert:
+    that:
+      - "{{ item|int > 0 and LEO.stdout_lines[1:]|max|int - item|int < 1000}}"
+    fail_msg: "UnreachableQuorumMember or Found at least one quorum voter with an offset {{ item }}, while the primary controller was at offset {{ LEO.stdout_lines[1:]|max}}
+               The max allowed offset lag is 1000"
+    success_msg: "{{LEO.stdout_lines[1:]|max|int}}"
+  loop: "{{ LEO.stdout_lines[1:] }}"
+  ignore_errors: false
   changed_when: false
   check_mode: false
   when:
@@ -106,7 +103,6 @@
     # Skip if any previous checks failed
     - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False) and not mds_result.failed|default(False)
     - not fips_enabled|bool
-    # - inventory_hostname in groups.kafka_broker
 
 - name: Fetch Log Files and Error out
   block:
