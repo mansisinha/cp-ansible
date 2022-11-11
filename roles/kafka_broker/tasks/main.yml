@@ -407,7 +407,9 @@
       --entity-type users --entity-name {{ item.value['principal'] }}
   loop: "{{ sasl_scram_users_final|dict2items }}"
   run_once: true
-  when: not kraft_enabled|bool and "'SCRAM-SHA-512' in kafka_broker_sasl_enabled_mechanisms"
+  when:
+    - " 'SCRAM-SHA-512' in kafka_broker_sasl_enabled_mechanisms"
+    - not kraft_enabled|bool
   no_log: "{{mask_secrets|bool}}"
 
 - name: Create SCRAM 256 Users
@@ -419,7 +421,9 @@
       --entity-type users --entity-name {{ item.value['principal'] }}
   loop: "{{ sasl_scram256_users_final|dict2items }}"
   run_once: true
-  when: not kraft_enabled|bool and  "'SCRAM-SHA-256' in kafka_broker_sasl_enabled_mechanisms"
+  when:
+    - " 'SCRAM-SHA-256' in kafka_broker_sasl_enabled_mechanisms"
+    - not kraft_enabled|bool
   no_log: "{{ mask_sensitive_logs|bool }}"
 
 - name: Deploy JMX Exporter Config File

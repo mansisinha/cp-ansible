@@ -76,7 +76,6 @@
       - "{{ item|int > 0 and LEO.stdout_lines[1:]|max|int - item|int < 1000}}"
     fail_msg: "UnreachableQuorumMember or Found at least one quorum voter with an offset {{ item }}, while the primary controller was at offset {{ LEO.stdout_lines[1:]|max}}
                The max allowed offset lag is 1000"
-    success_msg: "{{LEO.stdout_lines[1:]|max|int}}"
   loop: "{{ LEO.stdout_lines[1:] }}"
   ignore_errors: false
   changed_when: false
