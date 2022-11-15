@@ -7,10 +7,46 @@
 driver:
   name: docker
 platforms:
-  - name: zookeeper1
-    hostname: zookeeper1.confluent
+  # - name: zookeeper1
+  #   hostname: zookeeper1.confluent
+  #   groups:
+  #     - zookeeper
+  #   image: geerlingguy/docker-centos8-ansible
+  #   dockerfile: ../Dockerfile-rhel-java17.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent
+  - name: controller1
+    hostname: controller1.confluent
     groups:
-      - zookeeper
+      - kafka_controller
+    image: geerlingguy/docker-centos8-ansible
+    dockerfile: ../Dockerfile-rhel-java17.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent
+  - name: controller2
+    hostname: controller2.confluent
+    groups:
+      - kafka_controller
+    image: geerlingguy/docker-centos8-ansible
+    dockerfile: ../Dockerfile-rhel-java17.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent
+  - name: controller3
+    hostname: controller3.confluent
+    groups:
+      - kafka_controller
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -158,6 +194,7 @@ provisioner:
 
     group_vars:
       all:
+        kraft_enabled: true
         ssl_enabled: true
         ssl_mutual_auth_enabled: true
 
