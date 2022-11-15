@@ -63,6 +63,8 @@
   shell: |
     echo confluent.use.controller.listener=true > /etc/kafka/tmp.properties; \ {{ binary_base_path }}/bin/kafka-metadata-quorum --bootstrap-server {{inventory_hostname}}:9093 \
       --command-config /etc/kafka/tmp.properties describe --replication | awk '{print $2}'; rm /etc/kafka/tmp.properties;
+  environment:
+    KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
   register: LEO
   ignore_errors: true
   changed_when: false

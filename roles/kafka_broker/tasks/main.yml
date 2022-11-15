@@ -200,7 +200,9 @@
     - configuration
 
 - name: get uuid
-  shell: /usr/bin/kafka-storage random-uuid
+  shell: "{{ binary_base_path }}/bin/kafka-storage random-uuid"
+  environment:
+    KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
   register: uuid_key
   run_once: true
   when: kraft_enabled|bool and inventory_hostname in groups.kafka_controller
@@ -218,11 +220,11 @@
 
 - name: get CLUSTER_ID
   set_fact:
-    clusterid: "{{ uuid_key.stdout if inventory_hostname in groups.kafka_controller else uuid_key_broker | split('cluster.id=') | last | trim}}"
+    clusterid: "{{ uuid_key.stdout if inventory_hostname in groups.kafka_controller else uuid_key_broker.partition('cluster.id=')[2].partition('\n')[0] }}"
   when: kraft_enabled|bool
 
 - name: format meta directory
-  shell: /usr/bin/kafka-storage  format -t {{ clusterid }} -c /etc/kafka/server.properties --ignore-formatted
+  shell: "{{ binary_base_path }}/bin/kafka-storage  format -t {{ clusterid }} -c {{ base_path }}/etc/kafka/server.properties --ignore-formatted"
   register: format_meta
   when: kraft_enabled|bool
 
