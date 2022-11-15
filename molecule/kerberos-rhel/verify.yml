@@ -2,10 +2,51 @@
 ### Validates that Kerberos is enabled across all components.
 ### Validates that SASL SSL Plaintext is enabled across all components.
 
+- name: Verify - kafka_controller
+  hosts: kafka_controller
+  gather_facts: false
+  tasks:
+    - name: Check process role
+      import_role:
+        name: confluent.test
+        tasks_from: check_property.yml
+      vars:
+        file_path: /etc/kafka/server.properties
+        property: process.roles
+        expected_value: controller
+
+    - name: Check listener
+      import_role:
+        name: confluent.test
+        tasks_from: check_property.yml
+      vars:
+        file_path: /etc/kafka/server.properties
+        property: listeners
+        expected_value: CONTROLLER://:9093
+
+    - name: Check quorum voters
+      import_role:
+        name: confluent.test
+        tasks_from: check_property.yml
+      vars:
+        file_path: /etc/kafka/server.properties
+        property: controller.quorum.voters
+        expected_value: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
+
 - name: Verify - kafka_broker
   hosts: kafka_broker
   gather_facts: false
   tasks:
+    - name: Check process role
+      import_role:
+        name: confluent.test
+        tasks_from: check_property.yml
+      vars:
+        file_path: /etc/kafka/server.properties
+        property: process.roles
+        expected_value: broker
+      when: kraft_enabled|bool
+
     - import_role:
         name: confluent.test
         tasks_from: check_property.yml
