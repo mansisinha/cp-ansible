@@ -224,7 +224,7 @@
   when: kraft_enabled|bool
 
 - name: format meta directory
-  shell: "{{ binary_base_path }}/bin/kafka-storage  format -t {{ clusterid }} -c {{ base_path }}/etc/kafka/server.properties --ignore-formatted"
+  shell: "{{ binary_base_path }}/bin/kafka-storage  format -t {{ clusterid }} -c {{ kafka_broker.config_file }} --ignore-formatted"
   register: format_meta
   when: kraft_enabled|bool
 

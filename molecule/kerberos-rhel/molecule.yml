@@ -179,6 +179,9 @@ provisioner:
           kdc_hostname: kerberos1
           admin_hostname: kerberos1
 
+      kafka_controller:
+        kafka_broker_kerberos_principal: "kafka-a/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
+        kafka_broker_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/kafka_broker-{{inventory_hostname}}.keytab"
       zookeeper:
         zookeeper_kerberos_principal: "zk/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
         zookeeper_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/zookeeper-{{inventory_hostname}}.keytab"
