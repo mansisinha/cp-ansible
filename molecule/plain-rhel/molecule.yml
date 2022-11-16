@@ -137,7 +137,7 @@ provisioner:
       all:
         kraft_enabled: true
         sasl_protocol: plain
-        kafka_broker_configure_control_plane_listener: true
+        # kafka_broker_configure_control_plane_listener: true # not supported in kraft
         zookeeper_custom_properties:
           dataLogDir: /opt/zookeeper
 
