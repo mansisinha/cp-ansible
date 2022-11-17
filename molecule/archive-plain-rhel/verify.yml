@@ -13,7 +13,7 @@
         name: confluent.test
         tasks_from: check_property.yml
       vars:
-        file_path: /etc/kafka/server.properties
+        file_path: /opt/confluent/etc/kafka/server.properties
         property: process.roles
         expected_value: controller
 
@@ -22,7 +22,7 @@
         name: confluent.test
         tasks_from: check_property.yml
       vars:
-        file_path: /etc/kafka/server.properties
+        file_path: /opt/confluent/etc/kafka/server.properties
         property: listeners
         expected_value: CONTROLLER://:9093
 
@@ -31,7 +31,7 @@
         name: confluent.test
         tasks_from: check_property.yml
       vars:
-        file_path: /etc/kafka/server.properties
+        file_path: /opt/confluent/etc/kafka/server.properties
         property: controller.quorum.voters
         expected_value: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
 
@@ -44,7 +44,7 @@
         name: confluent.test
         tasks_from: check_property.yml
       vars:
-        file_path: /etc/kafka/server.properties
+        file_path: /opt/confluent/etc/kafka/server.properties
         property: process.roles
         expected_value: broker
       when: kraft_enabled|bool
