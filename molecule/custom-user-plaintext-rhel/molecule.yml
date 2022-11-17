@@ -7,23 +7,10 @@ driver:
   name: docker
 platforms:
   # Unset env vars resolve to the empty string
-  # - name: zookeeper1-kafka-broker1${JOB_BASE_NAME}${BUILD_NUMBER}
-  #   hostname: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
-  #   groups:
-  #     - zookeeper
-  #     - kafka_broker
-  #   image: geerlingguy/docker-centos8-ansible
-  #   dockerfile: ../Dockerfile-rhel-java17.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
-  - name: controller1-kafka-broker1${JOB_BASE_NAME}${BUILD_NUMBER}
-    hostname: controller1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  - name: zookeeper1-kafka-broker1${JOB_BASE_NAME}${BUILD_NUMBER}
+    hostname: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
     groups:
-      - kafka_controller
+      - zookeeper
       - kafka_broker
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
@@ -33,6 +20,19 @@ platforms:
     privileged: true
     networks:
       - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  # - name: controller1-kafka-broker1${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   hostname: controller1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   groups:
+  #     - kafka_controller
+  #     - kafka_broker
+  #   image: geerlingguy/docker-centos8-ansible
+  #   dockerfile: ../Dockerfile-rhel-java17.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
   - name: schema-registry1${JOB_BASE_NAME}${BUILD_NUMBER}
     hostname: schema-registry1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
     groups:
@@ -101,7 +101,7 @@ provisioner:
   inventory:
     group_vars:
       all:
-        kraft_enabled: true
+        # kraft_enabled: true
         scenario_name: custom-user-plaintext-rhel
         zookeeper_log_dir: /kafka/logs/
         kafka_broker_log_dir: /kafka/logs/

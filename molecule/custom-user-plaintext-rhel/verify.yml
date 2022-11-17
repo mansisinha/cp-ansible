@@ -113,7 +113,7 @@
         file_path: /etc/kafka/server.properties
         property: process.roles
         expected_value: broker
-      when: kraft_enabled|bool
+      when: kraft_enabled | default(false) |bool
 
 - name: Verify - Schema Registry custom user and custom group and custom logging directory and log file presence
   hosts: schema_registry
