@@ -153,7 +153,7 @@ kafka_broker_properties:
       process.roles: broker
       controller.quorum.voters: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
       controller.listener.names: CONTROLLER
-      listener.security.protocol.map: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,BROKER:PLAINTEXT
+      listener.security.protocol.map: "CONTROLLER:PLAINTEXT,{% for listener in kafka_broker_listeners|dict2items %}{% if loop.index > 1%},{% endif %}{{ listener['value']['name'] }}:{{ listener['value'] | confluent.platform.kafka_protocol_defaults(ssl_enabled, sasl_protocol)}}{% endfor %}"
       listeners: "{% for listener in kafka_broker_listeners|dict2items %}{% if loop.index > 1%},{% endif %}{{ listener['value']['name'] }}://{{ listener['value']['ip'] | default('') }}:{{ listener['value']['port'] }}{% endfor %}"
       kafka.rest.enable: "{{kafka_broker_rest_proxy_enabled|string|lower}}"
   broker_on_zookeeper:
