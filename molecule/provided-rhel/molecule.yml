@@ -191,6 +191,9 @@ provisioner:
         ssl_keystore_alias: "zookeeper.{{inventory_hostname}}"
 
       kafka_broker:
+        ssl_keystore_alias: "kafka_controller.{{inventory_hostname}}"
+
+      kafka_broker:
         ssl_keystore_alias: "kafka_broker.{{inventory_hostname}}"
 
       schema_registry:
