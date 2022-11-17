@@ -180,8 +180,8 @@ provisioner:
           admin_hostname: kerberos1
 
       kafka_controller:
-        kafka_broker_kerberos_principal: "kafka-a/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
-        kafka_broker_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/kafka_broker-{{inventory_hostname}}.keytab"
+        kafka_broker_kerberos_principal: "kafka_controller/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
+        kafka_broker_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/kafka_controller-{{inventory_hostname}}.keytab"
       zookeeper:
         zookeeper_kerberos_principal: "zk/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
         zookeeper_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/zookeeper-{{inventory_hostname}}.keytab"
@@ -213,6 +213,15 @@ provisioner:
           # Wish there was a better way to create this list, this will do for now
           - principal: "zk/zookeeper1.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/zookeeper-zookeeper1.keytab"
+
+          - principal: "kafka_controller/controller1.confluent@{{kerberos.realm | upper}}"
+            keytab_path: "keytabs/kafka_controller-controller1.keytab"
+
+          - principal: "kafka_controller/controller2.confluent@{{kerberos.realm | upper}}"
+            keytab_path: "keytabs/kafka_controller-controller2.keytab"
+
+          - principal: "kafka_controller/controller3.confluent@{{kerberos.realm | upper}}"
+            keytab_path: "keytabs/kafka_controller-controller3.keytab"
 
           - principal: "kafka-a/kafka-broker1.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/kafka_broker-kafka-broker1.keytab"
