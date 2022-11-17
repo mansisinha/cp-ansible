@@ -53,6 +53,16 @@
         file_path: /etc/kafka/server.properties
         property: listener.security.protocol.map
         expected_value: INTERNAL:SSL,BROKER:SSL
+      when: kraft_enabled|bool
+ 
+    - import_role:
+        name: confluent.test
+        tasks_from: check_property.yml
+      vars:
+        file_path: /etc/kafka/server.properties
+        property: listener.security.protocol.map
+        expected_value: INTERNAL:SSL,BROKER:SSL
+      when: not kraft_enabled|bool
 
 - name: Verify - schema_registry
   hosts: schema_registry
