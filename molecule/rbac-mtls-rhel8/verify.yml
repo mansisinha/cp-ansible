@@ -43,16 +43,6 @@
   hosts: kafka_broker
   gather_facts: false
   tasks:
-    - name: Check process role
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: process.roles
-        expected_value: broker
-      when: kraft_enabled|bool
-
     - shell: grep "Djdk.tls.ephemeralDHKeySize=2048" /etc/systemd/system/confluent-server.service.d/override.conf
       changed_when: false
 
