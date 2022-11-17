@@ -29,8 +29,7 @@
       vars:
         file_path: /opt/confluent/etc/kafka/server.properties
         property: process.roles
-        expected_value: broker
-      when: kraft_enabled|bool
+        expected_value: controller
 
     - name: Check listener
       import_role:
