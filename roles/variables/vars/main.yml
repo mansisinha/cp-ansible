@@ -147,6 +147,7 @@ kafka_broker_properties:
       listener.security.protocol.map: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,BROKER:PLAINTEXT
       listeners: CONTROLLER://:9093
       node.id: "{{ inventory_hostname[-1]|int + 9990 }}"
+      log.dirs: /var/lib/kafka/data
   broker_on_controller:
     enabled: "{{kraft_enabled|bool and inventory_hostname in groups.kafka_broker}}"
     properties:

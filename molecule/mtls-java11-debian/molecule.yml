@@ -162,4 +162,7 @@ provisioner:
 
         debian_java_package_name: openjdk-11-jdk
 
+      # kafka_broker:
         fips_enabled: true
+      kafka_controller:
+        ssl_enabled: false

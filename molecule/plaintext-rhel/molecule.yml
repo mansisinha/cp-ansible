@@ -7,10 +7,44 @@ driver:
   name: docker
 platforms:
   # Unset env vars resolve to the empty string
-  - name: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}
-    hostname: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  # - name: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   hostname: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   groups:
+  #     - zookeeper
+  #   image: geerlingguy/docker-centos8-ansible
+  #   dockerfile: ../Dockerfile-rhel-java17.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  # - name: zookeeper2${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   hostname: zookeeper2${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   groups:
+  #     - zookeeper
+  #   image: geerlingguy/docker-centos8-ansible
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  # - name: zookeeper3${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   hostname: zookeeper3${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   groups:
+  #     - zookeeper
+  #   image: geerlingguy/docker-centos8-ansible
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  - name: controller1${JOB_BASE_NAME}${BUILD_NUMBER}
+    hostname: controller1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
     groups:
-      - zookeeper
+      - kafka_controller
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -19,22 +53,24 @@ platforms:
     privileged: true
     networks:
       - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
-  - name: zookeeper2${JOB_BASE_NAME}${BUILD_NUMBER}
-    hostname: zookeeper2${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  - name: controller2${JOB_BASE_NAME}${BUILD_NUMBER}
+    hostname: controller2${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
     groups:
-      - zookeeper
+      - kafka_controller
     image: geerlingguy/docker-centos8-ansible
+    dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     networks:
       - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
-  - name: zookeeper3${JOB_BASE_NAME}${BUILD_NUMBER}
-    hostname: zookeeper3${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  - name: controller3${JOB_BASE_NAME}${BUILD_NUMBER}
+    hostname: controller3${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
     groups:
-      - zookeeper
+      - kafka_controller
     image: geerlingguy/docker-centos8-ansible
+    dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -133,6 +169,7 @@ provisioner:
   inventory:
     group_vars:
       all:
+        kraft_enabled: true
         scenario_name: plaintext-rhel
 
         # Testing the copy local agents feature

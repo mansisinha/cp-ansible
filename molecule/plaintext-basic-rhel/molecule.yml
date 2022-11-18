@@ -6,10 +6,46 @@ driver:
   name: docker
 platforms:
   # Unset env vars resolve to the empty string
-  - name: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}
-    hostname: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  # - name: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   hostname: zookeeper1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  #   groups:
+  #     - zookeeper
+  #   image: geerlingguy/docker-centos7-ansible
+  #   dockerfile: ../Dockerfile-rhel7-java17.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  - name: controller1${JOB_BASE_NAME}${BUILD_NUMBER}
+    hostname: controller1${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
     groups:
-      - zookeeper
+      - kafka_controller
+    image: geerlingguy/docker-centos7-ansible
+    dockerfile: ../Dockerfile-rhel7-java17.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  - name: controller2${JOB_BASE_NAME}${BUILD_NUMBER}
+    hostname: controller2${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+    groups:
+      - kafka_controller
+    image: geerlingguy/docker-centos7-ansible
+    dockerfile: ../Dockerfile-rhel7-java17.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+  - name: controller3${JOB_BASE_NAME}${BUILD_NUMBER}
+    hostname: controller3${JOB_BASE_NAME}${BUILD_NUMBER}.confluent${JOB_BASE_NAME}${BUILD_NUMBER}
+    groups:
+      - kafka_controller
     image: geerlingguy/docker-centos7-ansible
     dockerfile: ../Dockerfile-rhel7-java17.j2
     command: ""
@@ -98,6 +134,7 @@ provisioner:
   inventory:
     group_vars:
       all:
+        kraft_enabled: true
         scenario_name: plaintext-basic-rhel
         custom_java_path: /opt/jdk17    # Use custom java 17
 
