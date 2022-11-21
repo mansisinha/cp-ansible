@@ -123,6 +123,7 @@
         file_path: /etc/kafka/server.properties
         property: listener.name.controller.sasl.enabled.mechanisms
         expected_value: PLAIN
+      when: not kraft_enabled|bool
 
     - import_role:
         name: confluent.test

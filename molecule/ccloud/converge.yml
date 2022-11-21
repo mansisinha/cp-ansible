@@ -11,6 +11,14 @@
       delegate_to: 127.0.0.1
       run_once: true
 
+    - name: Change controller Group Name in Inventory File
+      lineinfile:
+        path: "{{inventory_dir}}/ansible_inventory.yml"
+        regexp: 'kafka_controller:'
+        line: 'kafka_controller_ccloud:'
+      delegate_to: 127.0.0.1
+      run_once: true
+
     - name: Change kafka_broker Group Name in Inventory File
       lineinfile:
         path: "{{inventory_dir}}/ansible_inventory.yml"

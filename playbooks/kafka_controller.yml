@@ -30,7 +30,6 @@
   tasks:
     - set_fact:
         kafka_broker_rest_proxy_enabled: false
-        fips_enabled: false
     - import_role:
         name: kafka_broker
 
