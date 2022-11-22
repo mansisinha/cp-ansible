@@ -52,7 +52,7 @@
       vars:
         file_path: /etc/kafka/server.properties
         property: listener.security.protocol.map
-        expected_value: CONTROLLER:PLAINTEXT,INTERNAL:SSL,BROKER:SSL
+        expected_value: CONTROLLER:SSL,INTERNAL:SSL,BROKER:SSL
       when: kraft_enabled|bool
  
     - import_role:
