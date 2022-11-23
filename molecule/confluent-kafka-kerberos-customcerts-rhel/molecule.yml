@@ -214,7 +214,7 @@ provisioner:
           admin_hostname: kerberos1
 
       kafka_controller:
-        kafka_broker_kerberos_principal: "kafka_controller/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
+        kafka_broker_kerberos_principal: "kafka/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
         kafka_broker_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/kafka_controller-{{inventory_hostname}}.keytab"
       zookeeper:
         zookeeper_kerberos_principal: "zookeeper/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
@@ -254,13 +254,13 @@ provisioner:
           - principal: "zookeeper/zookeeper3.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/zookeeper-zookeeper3.keytab"
 
-          - principal: "kafka_controller/controller1.confluent@{{kerberos.realm | upper}}"
+          - principal: "kafka/controller1.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/kafka_controller-controller1.keytab"
           
-          - principal: "kafka_controller/controller2.confluent@{{kerberos.realm | upper}}"
+          - principal: "kafka/controller2.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/kafka_controller-controller2.keytab"
           
-          - principal: "kafka_controller/controller3.confluent@{{kerberos.realm | upper}}"
+          - principal: "kafka/controller3.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/kafka_controller-controller3.keytab"
           
           - principal: "kafka/kafka-broker1.confluent@{{kerberos.realm | upper}}"
