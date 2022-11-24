@@ -62,7 +62,7 @@
 - name: Check kafka-metadata-quorum
   shell: |
     echo confluent.use.controller.listener=true > kraft-tmp.properties; \ {{ binary_base_path }}/bin/kafka-metadata-quorum --bootstrap-server {{inventory_hostname}}:9093 \
-      --command-config kraft-tmp.properties describe --replication | awk '{print $2}'; rm kraft-tmp.properties;
+      --command-config kraft-tmp.properties describe --replication | awk '{print $2}'
   environment:
     KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
   register: LEO
@@ -72,10 +72,19 @@
   when:
     - kraft_enabled|bool and inventory_hostname in groups.kafka_controller
 
+- name: check LEO
+  assert:
+    that: LEO.rc!=0
+  ignore_errors: false
+  changed_when: false
+  check_mode: false
+  when:
+    - kraft_enabled|bool and inventory_hostname in groups.kafka_controller
+
 - name: Check LogEndOffset values
   assert:
     that:
-      - "{{ item|int > 0 and LEO.stdout_lines[1:]|max|int - item|int < 1000}}"
+      - "{{ item|int > 0 and LEO.stdout_lines[1:]|max|int - item|int < 1000 }}"
     fail_msg: "UnreachableQuorumMember or Found at least one quorum voter with an offset {{ item }}, while the primary controller was at offset {{ LEO.stdout_lines[1:]|max}}
                The max allowed offset lag is 1000"
   loop: "{{ LEO.stdout_lines[1:] }}"

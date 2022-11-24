@@ -10,8 +10,8 @@ confluent_package_debian_suffix: "{{ '=' + confluent_full_package_version if con
 confluent_common_repository_redhat_release_version: "{{ ansible_distribution_major_version if ansible_os_family == 'RedHat' else ''}}"
 confluent_common_repository_debian_release_version: "{{ansible_distribution_release if ansible_os_family == 'Debian' else ''}}"
 
-### temporary variable
-kraft_enabled: false
+### Runs kafka in Kraft mode if controller is present
+kraft_enabled: "{{ true if 'kafka_controller' in groups.keys() and groups['kafka_controller'] | length > 0 else false }}"
 
 # Deprecated, see mask_sensitive_logs
 mask_secrets: true
