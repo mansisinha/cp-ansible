@@ -1,6 +1,6 @@
 ---
 - name: Install OpenSSL Rsync and Java
-  hosts: zookeeper[0]:kafka_controller[0]
+  hosts: kafka_broker[0]
   tasks:
     - name: Install OpenSSL Rsync and Java
       yum:
@@ -53,7 +53,7 @@
           loop: "{{groups['zookeeper']}}"
           when: groups['zookeeper'] is defined
 
-        - name: Write controller hostnames for cert creation
+        - name: Write Kraft Controller hostnames for cert creation
           lineinfile:
             line: "kafka_controller:{{item}}"
             path: /var/ssl/private/generation/certificate-hosts

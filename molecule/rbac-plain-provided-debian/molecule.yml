@@ -6,6 +6,7 @@
 ### Kafka Broker Customer Listener.
 ### Secrets protection enabled.
 ### Control Center disabled, metrics reporters enabled.
+### LdapAuthenticateCallbackHandler for AuthN
 
 driver:
   name: docker
@@ -22,10 +23,10 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  - name: zookeeper1
-    hostname: zookeeper1.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}1
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}1.confluent
     groups:
-      - zookeeper
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-debian9-ansible
     dockerfile: ../Dockerfile-debian.j2
     command: ""
@@ -34,10 +35,10 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  - name: zookeeper2
-    hostname: zookeeper2.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}2
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}2.confluent
     groups:
-      - zookeeper
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-debian9-ansible
     dockerfile: ../Dockerfile-debian.j2
     command: ""
@@ -46,10 +47,10 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  - name: zookeeper3
-    hostname: zookeeper3.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}3
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}3.confluent
     groups:
-      - zookeeper
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-debian9-ansible
     dockerfile: ../Dockerfile-debian.j2
     command: ""
@@ -58,42 +59,6 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  # - name: controller1
-  #   hostname: controller1.confluent
-  #   groups:
-  #     - kafka_controller
-  #   image: geerlingguy/docker-debian9-ansible
-  #   dockerfile: ../Dockerfile-debian.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  # - name: controller2
-  #   hostname: controller2.confluent
-  #   groups:
-  #     - kafka_controller
-  #   image: geerlingguy/docker-debian9-ansible
-  #   dockerfile: ../Dockerfile-debian.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  # - name: controller3
-  #   hostname: controller3.confluent
-  #   groups:
-  #     - kafka_controller
-  #   image: geerlingguy/docker-debian9-ansible
-  #   dockerfile: ../Dockerfile-debian.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
   - name: kafka-broker1
     hostname: kafka-broker1.confluent
     groups:
@@ -197,7 +162,6 @@ provisioner:
   inventory:
     group_vars:
       all:
-        # kraft_enabled: true
         scenario_name: rbac-plain-provided-debian
 
         sasl_protocol: plain
@@ -219,6 +183,8 @@ provisioner:
           client_listener:
             name: CLIENT
             port: 9093
+            ssl_enabed: true
+            sasl_protocol: plain
 
         mds_super_user: mds
         mds_super_user_password: password
@@ -255,6 +221,10 @@ provisioner:
           ldap.group.name.attribute: cn
           ldap.group.member.attribute.pattern: CN=(.*),OU=rbac,DC=example,DC=com
           ldap.user.object.class: account
+
+          # interbroker listener need to include user/password in this jaasconfig
+          listener.name.client.plain.sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required;
+          listener.name.client.plain.sasl.server.callback.handler.class: io.confluent.security.auth.provider.ldap.LdapAuthenticateCallbackHandler
 
         kafka_broker_metrics_reporter_enabled: true
         monitoring_interceptors_enabled: true

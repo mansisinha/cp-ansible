@@ -5,47 +5,11 @@
 driver:
   name: docker
 platforms:
-  # - name: zookeeper1
-  #   hostname: zookeeper1.confluent
-  #   groups:
-  #     - zookeeper
-  #   image: geerlingguy/docker-centos8-ansible
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  - name: controller1
-    hostname: controller1.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}1
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}1.confluent
     groups:
-      - kafka_controller
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-centos8-ansible
-    # dockerfile: ../Dockerfile-rhel-java17.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller2
-    hostname: controller2.confluent
-    groups:
-      - kafka_controller
-    image: geerlingguy/docker-centos8-ansible
-    # dockerfile: ../Dockerfile-rhel-java17.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller3
-    hostname: controller3.confluent
-    groups:
-      - kafka_controller
-    image: geerlingguy/docker-centos8-ansible
-    # dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
@@ -148,20 +112,16 @@ provisioner:
   inventory:
     group_vars:
       all:
-        kraft_enabled: true
         scenario_name: mtls-customcerts-rhel
-
         ssl_enabled: true
         ssl_mutual_auth_enabled: true
-
         ssl_file_dir: /opt/test-ssl
-
         ssl_custom_certs: true
         ssl_ca_cert_filepath: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/generated_ssl_files/ca.crt"
         ssl_signed_cert_filepath: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/generated_ssl_files/{{inventory_hostname}}-ca1-signed.crt"
         ssl_key_filepath: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/generated_ssl_files/{{inventory_hostname}}-key.pem"
         ssl_key_password: keypass
 
-      zookeeper:
+      ${CONTROLLER_HOSTGROUP:-zookeeper}:
         # Test that both with/without trailing slash works
         ssl_file_dir: /opt/test-ssl/

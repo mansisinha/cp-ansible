@@ -9,46 +9,10 @@
 driver:
   name: docker
 platforms:
-  # - name: zookeeper1
-  #   hostname: zookeeper1.confluent
-  #   groups:
-  #     - zookeeper
-  #   image: geerlingguy/docker-centos8-ansible
-  #   dockerfile: ../Dockerfile-rhel-java17.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  - name: controller1
-    hostname: controller1.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}1
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}1.confluent
     groups:
-      - kafka_controller
-    image: geerlingguy/docker-centos8-ansible
-    dockerfile: ../Dockerfile-rhel-java17.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller2
-    hostname: controller2.confluent
-    groups:
-      - kafka_controller
-    image: geerlingguy/docker-centos8-ansible
-    dockerfile: ../Dockerfile-rhel-java17.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller3
-    hostname: controller3.confluent
-    groups:
-      - kafka_controller
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -135,9 +99,8 @@ provisioner:
   inventory:
     group_vars:
       all:
-        kraft_enabled: true
         sasl_protocol: plain
-        # kafka_broker_configure_control_plane_listener: true # not supported in kraft
+        kafka_broker_configure_control_plane_listener: true
         zookeeper_custom_properties:
           dataLogDir: /opt/zookeeper
 
@@ -152,10 +115,10 @@ provisioner:
               file: "/etc/kafka/connect-distributed.properties"
               topics: "test_topic"
 
-        zookeeper_service_unit_overrides:
-          Description: Custom Zookeeper description
+        ${CONTROLLER_HOSTGROUP:-zookeeper}_service_unit_overrides:
+          Description: Custom Controller description
 
-        zookeeper_log4j_root_logger: INFO, zkAppender
+        ${CONTROLLER_HOSTGROUP:-zookeeper}_log4j_root_logger: INFO, zkAppender
 
         kafka_broker_service_unit_overrides:
           Description: Custom Kafka description

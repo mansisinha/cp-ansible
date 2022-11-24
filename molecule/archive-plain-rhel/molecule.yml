@@ -11,46 +11,10 @@
 driver:
   name: docker
 platforms:
-  # - name: zookeeper1
-  #   hostname: zookeeper1.confluent
-  #   groups:
-  #     - zookeeper
-  #   image: geerlingguy/docker-centos8-ansible
-  #   dockerfile: ../Dockerfile-tar.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  - name: controller1
-    hostname: controller1.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}1
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}1.confluent
     groups:
-      - kafka_controller
-    image: geerlingguy/docker-centos8-ansible
-    dockerfile: ../Dockerfile-tar.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller2
-    hostname: controller2.confluent
-    groups:
-      - kafka_controller
-    image: geerlingguy/docker-centos8-ansible
-    dockerfile: ../Dockerfile-tar.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller3
-    hostname: controller3.confluent
-    groups:
-      - kafka_controller
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-tar.j2
     command: ""
@@ -137,7 +101,6 @@ provisioner:
   inventory:
     group_vars:
       all:
-        kraft_enabled: true
         # Validating custom port works on ERP.
         mds_port: 7000
         # Validating that cluster naming is disabled when RBAC is not present.
@@ -159,7 +122,7 @@ provisioner:
         kafka_broker_custom_client_properties:
           abc: xyz
 
-        zookeeper_log_dir: /zk/logs
+        ${CONTROLLER_HOSTGROUP:-zookeeper}_log_dir: /${CONTROLLER_HOSTGROUP:-zookeeper}/logs
         kafka_broker_log_dir: /kafka/logs/
         schema_registry_log_dir: /sr/logs
         kafka_rest_log_dir: /rp/logs

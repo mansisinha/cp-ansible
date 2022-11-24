@@ -1,49 +1,8 @@
 ---
-- name: Verify - kafka_controller
-  hosts: kafka_controller
-  gather_facts: false
-  tasks:
-    - name: Check process role
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: process.roles
-        expected_value: controller
-
-    - name: Check listener
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: listeners
-        expected_value: CONTROLLER://:9093
-
-    - name: Check quorum voters
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: controller.quorum.voters
-        expected_value: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
-
 - name: Verify - kafka_brokers
   hosts: kafka_broker
   gather_facts: false
   tasks:
-    - name: Check process role
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: process.roles
-        expected_value: broker
-      when: kraft_enabled|bool
-
     - name: Get Broker's URL from cluster info endpoint
       uri:
         url: "https://kafka-broker3:8090/kafka/v3/clusters"
@@ -80,6 +39,7 @@
   hosts: kafka-broker5
   tasks:
     - name: Run zookeeper shell to get broker ID's
+      # Kraft:TODO: get cluster ID from different method for kraft based scenarios
       shell: >
           /usr/bin/zookeeper-shell zookeeper1:2182  -zk-tls-config-file  /etc/kafka/zookeeper-tls-client.properties ls /brokers/ids
       register: zk_output

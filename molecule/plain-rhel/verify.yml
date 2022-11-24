@@ -28,7 +28,7 @@
     - name: Check Updated Service Description
       shell: systemctl status confluent-zookeeper
       register: systemctl_status
-      failed_when: "'Custom Zookeeper description' not in systemctl_status.stdout_lines[0]"
+      failed_when: "'Custom Controller description' not in systemctl_status.stdout_lines[0]"
       changed_when: false
 
     - import_role:
@@ -39,51 +39,10 @@
         property: log4j.rootLogger
         expected_value: "INFO, zkAppender"
 
-- name: Verify - kafka_controller
-  hosts: kafka_controller
-  gather_facts: false
-  tasks:
-    - name: Check process role
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: process.roles
-        expected_value: controller
-
-    - name: Check listener
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: listeners
-        expected_value: CONTROLLER://:9093
-
-    - name: Check quorum voters
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: controller.quorum.voters
-        expected_value: 9991@controller1:9093,9992@controller2:9093,9993@controller3:9093
-
 - name: Verify - kafka_broker
   hosts: kafka_broker
   gather_facts: false
   tasks:
-    - name: Check process role
-      import_role:
-        name: confluent.test
-        tasks_from: check_property.yml
-      vars:
-        file_path: /etc/kafka/server.properties
-        property: process.roles
-        expected_value: broker
-      when: kraft_enabled|bool
-
     - import_role:
         name: confluent.test
         tasks_from: check_property.yml
@@ -99,7 +58,6 @@
         file_path: /etc/kafka/server.properties
         property: control.plane.listener.name
         expected_value: CONTROLLER
-      when: not kraft_enabled|bool
 
     - import_role:
         name: confluent.test
@@ -123,7 +81,6 @@
         file_path: /etc/kafka/server.properties
         property: listener.name.controller.sasl.enabled.mechanisms
         expected_value: PLAIN
-      when: not kraft_enabled|bool
 
     - import_role:
         name: confluent.test

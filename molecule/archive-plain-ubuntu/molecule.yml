@@ -8,46 +8,10 @@
 driver:
   name: docker
 platforms:
-  # - name: zookeeper1
-  #   hostname: zookeeper1.confluent
-  #   groups:
-  #     - zookeeper
-  #   image: geerlingguy/docker-ubuntu1804-ansible
-  #   dockerfile: ../Dockerfile-ubuntu-archive.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  - name: controller1
-    hostname: controller1.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}1
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}1.confluent
     groups:
-      - kafka_controller
-    image: geerlingguy/docker-ubuntu1804-ansible
-    dockerfile: ../Dockerfile-ubuntu-archive.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller2
-    hostname: controller2.confluent
-    groups:
-      - kafka_controller
-    image: geerlingguy/docker-ubuntu1804-ansible
-    dockerfile: ../Dockerfile-ubuntu-archive.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: controller3
-    hostname: controller3.confluent
-    groups:
-      - kafka_controller
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-ubuntu1804-ansible
     dockerfile: ../Dockerfile-ubuntu-archive.j2
     command: ""
@@ -134,14 +98,13 @@ provisioner:
   inventory:
     group_vars:
       all:
-        kraft_enabled: true
         sasl_protocol: plain
         ssl_enabled: true
         installation_method: "archive"
         kafka_connect_confluent_hub_plugins:
           - jcustenborder/kafka-connect-spooldir:2.0.43
 
-        zookeeper_log_dir: /zk/logs
+        ${CONTROLLER_HOSTGROUP:-zookeeper}_log_dir: /${CONTROLLER_HOSTGROUP:-zookeeper}/logs
         kafka_broker_log_dir: /kafka/logs/
         schema_registry_log_dir: /sr/logs
         kafka_rest_log_dir: /rp/logs

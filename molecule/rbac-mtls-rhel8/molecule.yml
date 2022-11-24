@@ -19,10 +19,10 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  - name: zookeeper1
-    hostname: zookeeper1.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}1
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}1.confluent
     groups:
-      - zookeeper
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -31,42 +31,6 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  # - name: controller1
-  #   hostname: controller1.confluent
-  #   groups:
-  #     - kafka_controller
-  #   image: geerlingguy/docker-centos8-ansible
-  #   dockerfile: ../Dockerfile-rhel-java17.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  # - name: controller2
-  #   hostname: controller2.confluent
-  #   groups:
-  #     - kafka_controller
-  #   image: geerlingguy/docker-centos8-ansible
-  #   dockerfile: ../Dockerfile-rhel-java17.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  # - name: controller3
-  #   hostname: controller3.confluent
-  #   groups:
-  #     - kafka_controller
-  #   image: geerlingguy/docker-centos8-ansible
-  #   dockerfile: ../Dockerfile-rhel-java17.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
   - name: kafka-broker1
     hostname: kafka-broker1.confluent
     groups:
@@ -169,7 +133,6 @@ provisioner:
   inventory:
     group_vars:
       all:
-        # kraft_enabled: true
         ssl_enabled: true
         ssl_mutual_auth_enabled: true
 
