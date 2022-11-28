@@ -59,10 +59,19 @@
     - not fips_enabled|bool
 
 # add health check for kafka controller
+- name: create temporary property file
+  shell: |
+    echo confluent.use.controller.listener=true >> {{ config_base_path }}/etc/kafka/client.properties
+  ignore_errors: true
+  changed_when: false
+  check_mode: false
+  when:
+    - kraft_enabled|bool and inventory_hostname in groups.kafka_controller
+
 - name: Check kafka-metadata-quorum
   shell: |
-    echo confluent.use.controller.listener=true > kraft-tmp.properties; \ {{ binary_base_path }}/bin/kafka-metadata-quorum --bootstrap-server {{inventory_hostname}}:9093 \
-      --command-config kraft-tmp.properties describe --replication | awk '{print $2}'
+    {{ binary_base_path }}/bin/kafka-metadata-quorum --bootstrap-server {{inventory_hostname}}:9093 \
+      --command-config {{ config_base_path }}/etc/kafka/client.properties describe --replication | awk '{print $2}'
   environment:
     KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
   register: LEO
@@ -72,9 +81,13 @@
   when:
     - kraft_enabled|bool and inventory_hostname in groups.kafka_controller
 
+- name: debug
+  debug:
+    msg: "{{LEO}}"
+
 - name: check LEO
   assert:
-    that: LEO.rc!=0
+    that: LEO.rc==0
   ignore_errors: false
   changed_when: false
   check_mode: false
