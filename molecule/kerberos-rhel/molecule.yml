@@ -136,6 +136,12 @@ provisioner:
         scenario_name: kerberos-rhel
         redhat_java_package_name: java-11-openjdk     # Use Java 11 package
         sasl_protocol: kerberos
+        zookeeper_sasl_protocol: kerberos,plain
+        kafka_broker_custom_listeners:
+          internal:
+            name: INTERNAL
+            port: 9092
+            sasl_protocol: plain,kerberos
 
         kerberos:
           realm: realm.example.com
@@ -154,8 +160,9 @@ provisioner:
         kafka_broker_kerberos_principal: "kafka-a/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
         kafka_broker_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/kafka_broker-{{inventory_hostname}}.keytab"
       schema_registry:
-        schema_registry_kerberos_principal: "schema_registry/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
-        schema_registry_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/schema_registry-{{inventory_hostname}}.keytab"
+        sasl_protocol: plain
+        # schema_registry_kerberos_principal: "schema_registry/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
+        # schema_registry_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/schema_registry-{{inventory_hostname}}.keytab"
       kafka_rest:
         kafka_rest_kerberos_principal: "kafka_rest/{{inventory_hostname}}.confluent@{{kerberos.realm | upper}}"
         kafka_rest_kerberos_keytab_path: "{{ lookup('env', 'MOLECULE_SCENARIO_DIRECTORY') }}/keytabs/kafka_rest-{{inventory_hostname}}.keytab"
@@ -192,8 +199,8 @@ provisioner:
           - principal: "kafka-a/kafka-broker3.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/kafka_broker-kafka-broker3.keytab"
 
-          - principal: "schema_registry/schema-registry1.confluent@{{kerberos.realm | upper}}"
-            keytab_path: "keytabs/schema_registry-schema-registry1.keytab"
+          # - principal: "schema_registry/schema-registry1.confluent@{{kerberos.realm | upper}}"
+          #   keytab_path: "keytabs/schema_registry-schema-registry1.keytab"
 
           - principal: "kafka_rest/kafka-rest1.confluent@{{kerberos.realm | upper}}"
             keytab_path: "keytabs/kafka_rest-kafka-rest1.keytab"

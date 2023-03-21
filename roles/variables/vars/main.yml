@@ -197,9 +197,9 @@ kafka_controller_properties:
     properties:
       sasl.kerberos.service.name: "{{kerberos_kafka_controller_primary}}"
   inter_broker_sasl:
-    enabled: "{{ kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol != 'none' }}"
+    enabled: "{{ kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol }}"
     properties:
-      sasl.mechanism.inter.broker.protocol: "{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol}}"
+      sasl.mechanism.inter.broker.protocol: "{{','.join(kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol)}}"
   rbac:
     enabled: "{{ rbac_enabled }}"
     properties:
@@ -365,9 +365,9 @@ kafka_broker_properties:
       zookeeper.connect: "{{ groups['zookeeper'] | default(['localhost']) | confluent.platform.resolve_hostnames(hostvars) | join(':' + zookeeper_client_port|string + ',') }}:{{zookeeper_client_port}}{{zookeeper_chroot}}"
       inter.broker.listener.name: "{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['name']}}"
   controller_sasl:
-    enabled: "{{ kraft_enabled|bool and kafka_controller_listeners['controller']['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol != 'none' }}"
+    enabled: "{{ kraft_enabled|bool and kafka_controller_listeners['controller']['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol }}"
     properties:
-      sasl.mechanism.controller.protocol: "{{kafka_controller_listeners['controller']['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol}}"
+      sasl.mechanism.controller.protocol: "{{','.join(kafka_controller_listeners['controller']['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol)}}"
   controller_listener:
     enabled: "{{ kraft_enabled|bool }}"
     properties: "{{ kafka_controller_listeners | confluent.platform.listener_properties(kafka_controller_ssl_enabled, fips_enabled, kafka_controller_ssl_mutual_auth_enabled, kafka_controller_sasl_protocol,
@@ -408,9 +408,9 @@ kafka_broker_properties:
       ssl.key.password: "{{kafka_broker_keystore_storepass}}"
       ssl.enabled.protocols: TLSv1.2
   inter_broker_sasl:
-    enabled: "{{ kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol != 'none' }}"
+    enabled: "{{ kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol }}"
     properties:
-      sasl.mechanism.inter.broker.protocol: "{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol}}"
+      sasl.mechanism.inter.broker.protocol: "{{','.join(kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol)}}"
   sasl_enabled:
     enabled: "{{ kafka_broker_sasl_enabled_mechanisms|length > 0 }}"
     properties:
@@ -1028,32 +1028,32 @@ ksql_properties:
       authentication.realm: KsqlServer
       authentication.roles: "{{ ksql_basic_users | confluent.platform.get_roles | unique | join(',') }}"
   kafka_sasl_plain:
-    enabled: "{{ kafka_broker_listeners[ksql_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'PLAIN' }}"
+    enabled: "{{ sasl_protocol == 'plain' }}"
     properties:
       sasl.mechanism: PLAIN
       sasl.jaas.config: |-
         org.apache.kafka.common.security.plain.PlainLoginModule required username="{{sasl_plain_users_final.ksql.principal}}" password="{{sasl_plain_users_final.ksql.password}}";
   kafka_sasl_scram:
-    enabled: "{{ kafka_broker_listeners[ksql_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'SCRAM-SHA-512' }}"
+    enabled: "{{ sasl_protocol == 'scram' }}"
     properties:
       sasl.mechanism: SCRAM-SHA-512
       sasl.jaas.config: |-
         org.apache.kafka.common.security.scram.ScramLoginModule required username="{{sasl_scram_users_final.ksql.principal}}" password="{{sasl_scram_users_final.ksql.password}}";
   kafka_sasl_scram256:
-    enabled: "{{ kafka_broker_listeners[ksql_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'SCRAM-SHA-256' }}"
+    enabled: "{{ sasl_protocol == 'scram256' }}"
     properties:
       sasl.mechanism: SCRAM-SHA-256
       sasl.jaas.config: |-
         org.apache.kafka.common.security.scram.ScramLoginModule required username="{{sasl_scram256_users_final.ksql.principal}}" password="{{sasl_scram256_users_final.ksql.password}}";
   kafka_sasl_gssapi:
-    enabled: "{{ kafka_broker_listeners[ksql_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'GSSAPI' }}"
+    enabled: "{{ sasl_protocol == 'kerberos' }}"
     properties:
       sasl.mechanism: GSSAPI
       sasl.kerberos.service.name: "{{kerberos_kafka_broker_primary}}"
       sasl.jaas.config: |-
         com.sun.security.auth.module.Krb5LoginModule required useKeyTab=true storeKey=true keyTab="{{ksql_keytab_path}}" principal="{{ksql_kerberos_principal | default('ksql')}}";
   kafka_sasl_oauth:
-    enabled: "{{ kafka_broker_listeners[ksql_kafka_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'OAUTHBEARER' }}"
+    enabled: "{{ sasl_protocol == 'oauth' or rbac_enabled }}"
     properties:
       sasl.mechanism: OAUTHBEARER
       sasl.login.callback.handler.class: io.confluent.kafka.clients.plugins.auth.token.TokenUserLoginCallbackHandler
