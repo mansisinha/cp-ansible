@@ -1,0 +1,19 @@
+---
+##
+## The following is an example inventory file of the configuration required for setting up Confluent Platform with Kraft Controller with mTLS
+
+all:
+  vars:
+    ansible_connection: ssh
+    ansible_user: ubuntu
+    ansible_become: true
+    ansible_ssh_private_key_file: /home/centos/repos/ansible_collections/confluent/platform/cp-ansible.pem
+    ansible_python_interpreter: /usr/bin/python3
+    confluent_common_repository_baseurl:  https://jenkins-confluent-packages.s3.us-west-2.amazonaws.com/7.4.x/100
+    confluent_full_package_version: 7.4.0~0-1
+    confluent_package_version: 7.4.0
+    validate_hosts: false
+
+kafka_controller:
+  hosts:
+    ec2-54-245-154-31.us-west-2.compute.amazonaws.com:

@@ -127,6 +127,8 @@ kafka_controller_properties:
   defaults:
     enabled: true
     properties:
+      zookeeper.metadata.migration.enable: true
+      zookeeper.connect: ec2-35-88-160-97.us-west-2.compute.amazonaws.com:2181
       group.initial.rebalance.delay.ms: 3000
       log.retention.check.interval.ms: 300000
       log.retention.hours: 168
