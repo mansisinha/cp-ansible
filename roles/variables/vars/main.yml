@@ -127,7 +127,6 @@ kafka_controller_properties:
   defaults:
     enabled: true
     properties:
-      zookeeper.metadata.migration.enable: true
       zookeeper.connect: ec2-35-88-160-97.us-west-2.compute.amazonaws.com:2181
       group.initial.rebalance.delay.ms: 3000
       log.retention.check.interval.ms: 300000
@@ -160,6 +159,11 @@ kafka_controller_properties:
       listeners: "{{kafka_controller_listeners['controller']['name']}}://:{{kafka_controller_listeners['controller']['port']}}"
       node.id: "{{ node_id|default(groups.kafka_controller.index(inventory_hostname)|int + 9991) if inventory_hostname in groups.kafka_controller else 0}}"
       inter.broker.listener.name: "{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['name']}}"
+  migration_mode:
+    enabled: "{{ migration_enabled }}"
+    properties:
+      zookeeper.metadata.migration.enable: "true"
+      zookeeper.connect: "{{ zookeeper_hostname}}:{{ zookeeper_client_port}}"
   kraft_sasl_plain:
     enabled: "{{kafka_controller_sasl_protocol=='plain'}}"
     properties:
@@ -354,10 +358,19 @@ kafka_broker_properties:
       log.dirs: "/var/lib/kafka/data"
       kafka.rest.enable: "{{kafka_broker_rest_proxy_enabled|string|lower}}"
       inter.broker.listener.name: "{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['name']}}"
+  migration_mode:
+    enabled: "{{ kraft_enabled|bool and migration_enabled|bool }}"
+    properties:
+      zookeeper.metadata.migration.enable: "true"
+      zookeeper.connect: "{{ zookeeper_hostname}}:{{ zookeeper_client_port}}"
+      inter.broker.protocol.version: 3.4
+  non_migration_mode:
+    enabled: "{{ kraft_enabled|bool and not migration_enabled|bool }}"
+    properties:
+      process.roles: broker
   broker_on_controller:
     enabled: "{{kraft_enabled|bool}}"
     properties:
-      process.roles: broker
       controller.quorum.voters: "{{ kafka_controller_quorum_voters }}"
       controller.listener.names: "{{kafka_controller_listeners['controller']['name']}}"
       listener.security.protocol.map: "{% for listener in kafka_controller_listeners|dict2items %}{% if loop.index > 1%},{% endif %}{{ listener['value']['name'] }}:{{ listener['value'] | confluent.platform.kafka_protocol_defaults(kafka_controller_ssl_enabled, kafka_controller_sasl_protocol)}}{% endfor %},{% for listener in kafka_broker_listeners|dict2items %}{% if loop.index > 1%},{% endif %}{{ listener['value']['name'] }}:{{ listener['value'] | confluent.platform.kafka_protocol_defaults(ssl_enabled, sasl_protocol)}}{% endfor %}"

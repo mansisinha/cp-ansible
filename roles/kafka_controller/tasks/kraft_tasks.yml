@@ -1,19 +1,21 @@
 ---
-# - name: Get ClusterId
-#   shell: "{{ binary_base_path }}/bin/kafka-storage random-uuid"
-#   environment:
-#     KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
-#   register: uuid_key
-#   run_once: true
+- name: Get ClusterId
+  shell: "{{ binary_base_path }}/bin/kafka-storage random-uuid"
+  environment:
+    KAFKA_OPTS: "-Xlog:all=error -XX:+IgnoreUnrecognizedVMOptions"
+  register: uuid_key
+  run_once: true
+  when: not migration_enabled|bool
 
-- name: Extract ClusterId from meta.properties on KRaft Controller
+- name: Extract ClusterId from meta.properties on ZK Broker
   slurp:
     src: "/var/lib/kafka/data/meta.properties"
-  delegate_to: ec2-54-245-27-229.us-west-2.compute.amazonaws.com
-  register: uuid_key
+  delegate_to: "{{ groups.kafka_broker[0] }}"
+  register: zoo_cluster
+  when: migration_enabled|bool
 
 - name: Format Data Directory
   shell: "{{ binary_base_path }}/bin/kafka-storage  format -t {{ clusterid }} -c {{ kafka_controller.config_file }}  --ignore-formatted"
   register: format_meta
   vars:
-    clusterid: "{{ (uuid_key['content'] | b64decode).partition('cluster.id=')[2].partition('\n')[0] }}"
+    clusterid: "{{ (zoo_cluster['content'] | b64decode).partition('cluster.id=')[2].partition('\n')[0] if migration_enabled|bool else uuid_key.stdout }}"

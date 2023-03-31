@@ -242,7 +242,7 @@
 
 - name: Include Kraft tasks
   include_tasks: kraft_tasks.yml
-  when: kraft_enabled|bool
+  when: kraft_enabled|bool and not migration_enabled|bool
 
 # Zookeeper shell cannot read server.properties if secrets protection is enabled. Keeping a separate file.
 - name: Create Zookeeper TLS Client Config
