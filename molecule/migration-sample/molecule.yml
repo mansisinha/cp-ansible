@@ -9,6 +9,8 @@ platforms:
     hostname: zookeeper1.confluent
     groups:
       - zookeeper
+      - zookeeper2
+      - cluster2
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -131,5 +133,3 @@ provisioner:
 
       cluster2:
         migration_enabled: true
-        zookeeper_hostname: zookeeper1
-        zookeeper_client_port: 2181

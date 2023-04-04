@@ -29,57 +29,10 @@
       loop:
         - kafka_controller
         - kafka_broker
+        - zookeeper
 
     - name: Refresh Inventory
       meta: refresh_inventory
 
 - name: Converge
-  import_playbook: confluent.platform.all
-
-- name: Pause for 2 minutes for migration
-  hosts: all
-  gather_facts: false
-  tasks:
-    - name: Proceed Prompt
-      pause:
-        minutes: 2
-
-- name: Migrate Brokers to Kraft
-  hosts: kafka_broker
-  gather_facts: false
-  tasks:
-    - name: Remove Zookeeper configs from Broker
-      lineinfile:
-        path: /etc/kafka/server.properties
-        state: absent
-        regexp: "{{ item }}*"
-      loop:
-        - zookeeper
-        - inter.broker.protocol.version
-
-    - name: Reconfigure ZK Brokers as KRaft brokers 
-      lineinfile:
-        path: /etc/kafka/server.properties
-        line: process.roles=broker
-
-    - import_tasks: ../roles/kafka_broker/tasks/restart_and_wait.yml
-      vars:
-        kafka_broker_service_name: confluent-server
-        kafka_broker_health_check_delay: 20
-
-- name: Take Controllers out of migration mode
-  hosts: kafka_controller
-  gather_facts: false
-  tasks:
-    - name: Remove Zookeeper configs from Controller
-      lineinfile:
-        path: /etc/controller/server.properties
-        state: absent
-        regexp: "{{ item }}*"
-      loop:
-        - zookeeper
-    
-    - import_tasks: ../roles/kafka_controller/tasks/restart_and_wait.yml
-      vars:
-        kafka_controller_service_name: confluent-kcontroller
-        kafka_controller_health_check_delay: 20
+  import_playbook: ../playbooks/migrate.yml
