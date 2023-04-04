@@ -127,7 +127,6 @@ kafka_controller_properties:
   defaults:
     enabled: true
     properties:
-      zookeeper.connect: ec2-35-88-160-97.us-west-2.compute.amazonaws.com:2181
       group.initial.rebalance.delay.ms: 3000
       log.retention.check.interval.ms: 300000
       log.retention.hours: 168
@@ -162,8 +161,21 @@ kafka_controller_properties:
   migration_mode:
     enabled: "{{ migration_enabled }}"
     properties:
+      zookeeper.connection.timeout.ms: 18000
       zookeeper.metadata.migration.enable: "true"
-      zookeeper.connect: "{{ zookeeper_hostname}}:{{ zookeeper_client_port}}"
+      zookeeper.connect: "{{ groups['zookeeper'] | default(['localhost']) | confluent.platform.resolve_hostnames(hostvars) | join(':' + zookeeper_client_port|string + ',') }}:{{zookeeper_client_port}}{{zookeeper_chroot}}"
+  migration_ssl:
+    enabled: "{{ zookeeper_ssl_enabled and migration_enabled|bool}}"
+    properties:
+      zookeeper.ssl.client.enable: 'true'
+      zookeeper.clientCnxnSocket: org.apache.zookeeper.ClientCnxnSocketNetty
+      zookeeper.ssl.truststore.location: "{{kafka_controller_pkcs12_truststore_path}}"
+      zookeeper.ssl.truststore.password: "{{kafka_controller_truststore_storepass}}"
+  migration_mtls:
+    enabled: "{{ zookeeper_client_authentication_type == 'mtls' and migration_enabled|bool }}"
+    properties:
+      zookeeper.ssl.keystore.location: "{{kafka_controller_pkcs12_keystore_path}}"
+      zookeeper.ssl.keystore.password: "{{kafka_controller_keystore_storepass}}"
   kraft_sasl_plain:
     enabled: "{{kafka_controller_sasl_protocol=='plain'}}"
     properties:
@@ -361,8 +373,9 @@ kafka_broker_properties:
   migration_mode:
     enabled: "{{ kraft_enabled|bool and migration_enabled|bool }}"
     properties:
+      zookeeper.connection.timeout.ms: 18000
       zookeeper.metadata.migration.enable: "true"
-      zookeeper.connect: "{{ zookeeper_hostname}}:{{ zookeeper_client_port}}"
+      zookeeper.connect: "{{ groups['zookeeper'] | default(['localhost']) | confluent.platform.resolve_hostnames(hostvars) | join(':' + zookeeper_client_port|string + ',') }}:{{zookeeper_client_port}}{{zookeeper_chroot}}"
       inter.broker.protocol.version: 3.4
   non_migration_mode:
     enabled: "{{ kraft_enabled|bool and not migration_enabled|bool }}"
@@ -439,19 +452,19 @@ kafka_broker_properties:
     properties:
       sasl.kerberos.service.name: "{{kerberos_kafka_broker_primary}}"
   zk_ssl:
-    enabled: "{{ zookeeper_ssl_enabled and not kraft_enabled|bool}}"
+    enabled: "{{ zookeeper_ssl_enabled and (not kraft_enabled|bool or ( kraft_enabled|bool and migration_enabled|bool ))}}"
     properties:
       zookeeper.ssl.client.enable: 'true'
       zookeeper.clientCnxnSocket: org.apache.zookeeper.ClientCnxnSocketNetty
       zookeeper.ssl.truststore.location: "{{kafka_broker_pkcs12_truststore_path}}"
       zookeeper.ssl.truststore.password: "{{kafka_broker_truststore_storepass}}"
   zk_mtls:
-    enabled: "{{ zookeeper_client_authentication_type == 'mtls' and not kraft_enabled|bool }}"
+    enabled: "{{ zookeeper_client_authentication_type == 'mtls' and (not kraft_enabled|bool or ( kraft_enabled|bool and migration_enabled|bool ))}}"
     properties:
       zookeeper.ssl.keystore.location: "{{kafka_broker_pkcs12_keystore_path}}"
       zookeeper.ssl.keystore.password: "{{kafka_broker_keystore_storepass}}"
   zk_acls:
-    enabled: "{{ zookeeper_client_authentication_type in ['kerberos', 'digest'] and not kraft_enabled|bool }}"
+    enabled: "{{ zookeeper_client_authentication_type in ['kerberos', 'digest'] and (not kraft_enabled|bool or ( kraft_enabled|bool and migration_enabled|bool ))}}"
     properties:
       zookeeper.set.acl: 'true'
   sr:
