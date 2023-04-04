@@ -32,8 +32,17 @@
         line: process.roles=broker
 
 - name: Restart Kafka Broker
-  import_playbook: restart.yml
-  when: inventory_hostname in groups.kafka_broker
+  hosts: kafka_broker
+  gather_facts: true
+  serial: '1'
+  tasks:
+    - include_role:
+        name: kafka_broker
+        tasks_from: restart_and_wait.yml
+    - include_role:
+        name: kafka_broker
+        tasks_from: health_check.yml
+      tags: health_check
 
 - name: Take Controllers out of migration mode
   hosts: kafka_controller
@@ -48,8 +57,20 @@
         - zookeeper
 
 - name: Restart Kafka Controller
-  import_playbook: restart.yml
-  when: inventory_hostname in groups.kafka_controller
+  hosts: kafka_controller
+  gather_facts: true
+  serial: '1'
+  tasks:
+    - include_role:
+        name: kafka_controller
+        tasks_from: restart_and_wait.yml
+    - include_role:
+        name: kafka_controller
+        tasks_from: health_check.yml
+      tags: health_check
 
-- debug:
-    msg: "Zookeeper to Kraft migration is complete. Zookeeper can be safely stopped now."
+- name: Finish Migration
+  hosts: kafka_controller
+  tasks:
+    - debug:
+        msg: "Migration from Zookeeper to Kraft has completed, you may shut down your Zookeeper."
