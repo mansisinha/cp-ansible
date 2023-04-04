@@ -1,0 +1,55 @@
+---
+- import_playbook: kafka_controller.yml
+
+- import_playbook: kafka_broker.yml
+  vars:
+    deployment_strategy: 'serial'
+
+- name: Pause for 2 minutes for migration
+  hosts: kafka_controller
+  gather_facts: false
+  tasks:
+    - name: Proceed Prompt
+      pause:
+        minutes: 2
+
+- name: Migrate Brokers to Kraft
+  hosts: kafka_broker
+  gather_facts: false
+  tasks:
+    - name: Remove Zookeeper configs from Broker
+      lineinfile:
+        path: /etc/kafka/server.properties
+        state: absent
+        regexp: "{{ item }}*"
+      loop:
+        - zookeeper
+        - inter.broker.protocol.version
+
+    - name: Reconfigure ZK Brokers as KRaft brokers
+      lineinfile:
+        path: /etc/kafka/server.properties
+        line: process.roles=broker
+
+- name: Restart Kafka Broker
+  import_playbook: restart.yml
+  when: inventory_hostname in groups.kafka_broker
+
+- name: Take Controllers out of migration mode
+  hosts: kafka_controller
+  gather_facts: false
+  tasks:
+    - name: Remove Zookeeper configs from Controller
+      lineinfile:
+        path: /etc/controller/server.properties
+        state: absent
+        regexp: "{{ item }}*"
+      loop:
+        - zookeeper
+
+- name: Restart Kafka Controller
+  import_playbook: restart.yml
+  when: inventory_hostname in groups.kafka_controller
+
+- debug:
+    msg: "Zookeeper to Kraft migration is complete. Zookeeper can be safely stopped now."
