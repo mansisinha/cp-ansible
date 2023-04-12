@@ -31,6 +31,13 @@ class ConfluentServices:
             packages=["confluent-schema-registry", "confluent-schema-registry-plugins"]
         )
 
+    def KAFKA_CONTROLLER(self) -> ServiceData:
+        return ServiceData(
+            name=self.service_overrides.get("kafka_controller_service_name", "confluent-kcontroller.service"),
+            group="kafka_controller",
+            packages=["confluent-server"]
+        )
+
     def KAFKA_BROKER(self) -> ServiceData:
         return ServiceData(
             name=self.service_overrides.get("kafka_broker_service_name", "confluent-server.service"),

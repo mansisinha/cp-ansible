@@ -276,6 +276,10 @@ class FileUtils:
         return FileUtils.__read_service_configuration_file("kafka_broker.yml").get(name, [])
 
     @staticmethod
+    def get_kafka_controller_configs(name):
+        return FileUtils.__read_service_configuration_file("kafka_controller.yml").get(name, [])
+
+    @staticmethod
     def get_zookeeper_configs(name):
         return FileUtils.__read_service_configuration_file("zookeeper.yml").get(name, [])
 

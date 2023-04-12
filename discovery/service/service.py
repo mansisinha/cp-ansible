@@ -243,6 +243,12 @@ class ServicePropertyBuilder:
             ZookeeperServicePropertyBuilder.build_properties(self.input_context, self.inventory)
         return self
 
+    def with_kafka_controller_properties(self):
+        if self.confluent_services.KAFKA_CONTROLLER().group in self.inventory.groups.keys():
+            from discovery.service.kafka_controller import KafkaControllerServicePropertyBuilder
+            KafkaControllerServicePropertyBuilder.build_properties(self.input_context, self.inventory)
+        return self
+
     def with_kafka_broker_properties(self):
         if self.confluent_services.KAFKA_BROKER().group in self.inventory.groups.keys():
             from discovery.service.kafka_broker import KafkaServicePropertyBuilder

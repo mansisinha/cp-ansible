@@ -25,6 +25,7 @@ def build_service_properties(input_context: InputContext, inventory: CPInventory
     service_property_builder = ServicePropertyBuilder(input_context, inventory)
     service_property_builder. \
         with_zookeeper_properties(). \
+        with_kafka_controller_properties(). \
         with_kafka_broker_properties(). \
         with_schema_registry_properties(). \
         with_kafka_rest_properties(). \
