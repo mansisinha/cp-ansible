@@ -5,12 +5,11 @@ driver:
   name: docker
 platforms:
   # Zookeeper cluster
-  - name: zookeeper1
-    hostname: zookeeper1.confluent
+  - name: ${KRAFT_CONTROLLER:-zookeeper}1
+    hostname: ${KRAFT_CONTROLLER:-zookeeper}1.confluent
     groups:
-      - zookeeper
-      - zookeeper2
-      - cluster2
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}
+      - ${CONTROLLER_HOSTGROUP:-zookeeper}_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -23,8 +22,7 @@ platforms:
     hostname: kafka-broker1.confluent
     groups:
       - kafka_broker
-      - kafka_broker2
-      - cluster2
+      - kafka_broker_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -37,8 +35,7 @@ platforms:
     hostname: kafka-broker2.confluent
     groups:
       - kafka_broker
-      - kafka_broker2
-      - cluster2
+      - kafka_broker_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -51,6 +48,7 @@ platforms:
     hostname: schema-registry1.confluent
     groups:
       - schema_registry
+      - schema_registry_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -63,6 +61,7 @@ platforms:
     hostname: kafka-rest1.confluent
     groups:
       - kafka_rest
+      - kafka_rest_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -75,6 +74,7 @@ platforms:
     hostname: kafka-connect1.confluent
     groups:
       - kafka_connect
+      - kafka_connect_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -87,6 +87,7 @@ platforms:
     hostname: ksql1.confluent
     groups:
       - ksql
+      - ksql_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -99,6 +100,7 @@ platforms:
     hostname: control-center1.confluent
     groups:
       - control_center
+      - control_center_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -110,11 +112,10 @@ platforms:
     networks:
       - name: confluent
   # Cluster 2 goups, groupnames will be changed during converge phase
-  - name: controller1
-    hostname: controller1.confluent
+  - name: controller1_k
+    hostname: controller1_k.confluent
     groups:
-      - kafka_controller2
-      - cluster2
+      - kafka_controller_k
     image: geerlingguy/docker-centos8-ansible
     dockerfile: ../Dockerfile-rhel-java17.j2
     command: ""
@@ -125,11 +126,9 @@ platforms:
       - name: confluent
 provisioner:
   playbooks:
-    converge: ../migration_converge.yml
+    converge: ${MIGRATION_CONVERGE:-../collections_converge.yml}
   inventory:
     group_vars:
       all:
         scenario_name: migration-sample
-
-      cluster2:
-        migration_enabled: true
+        installation_method: archive

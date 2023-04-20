@@ -5,5 +5,13 @@
     - import_role:
         name: confluent.test.ldap
 
+- name: Provision KDC Server and Create Principals
+  hosts: kerberos_server
+  tags: kerberos
+  tasks:
+    - import_role:
+        name: confluent.test.kerberos
+
 - name: Install Zookeeper Cluster
   import_playbook: confluent.platform.all
+  when: lookup('env', 'MIGRATION')|default('false') == 'true'

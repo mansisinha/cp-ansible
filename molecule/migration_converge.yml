@@ -3,7 +3,7 @@
   hosts: kafka_broker
   gather_facts: false
   tasks:
-    - name: "Change {{item}} Group Name in Inventory File for Zookeeper"
+    - name: "Change {{item}} Group Name in Inventory File for Zookeeper cluster"
       lineinfile:
         path: "{{inventory_dir}}/ansible_inventory.yml"
         regexp: "{{item}}:"
@@ -22,7 +22,7 @@
     - name: "Change {{item}} Group Name in Inventory File for Kraft cluster"
       lineinfile:
         path: "{{inventory_dir}}/ansible_inventory.yml"
-        regexp: "{{item}}2:"
+        regexp: "{{item}}_k:"
         line: "{{item}}:"
       delegate_to: 127.0.0.1
       run_once: true
@@ -30,9 +30,14 @@
         - kafka_controller
         - kafka_broker
         - zookeeper
+        - schema_registry
+        - kafka_rest
+        - kafka_connect
+        - ksql
+        - control_center
 
     - name: Refresh Inventory
       meta: refresh_inventory
 
 - name: Converge
-  import_playbook: ../playbooks/migrate.yml
+  import_playbook: ../playbooks/migrate.yml migration_enabled=true
