@@ -53,3 +53,9 @@
       - openssl
       - unzip
   tags: package
+
+- name: Enable FIPS on rhel 8
+  include_tasks: fips.yml
+  when:
+    - ansible_os_family == "RedHat" and ansible_distribution_major_version == '8'
+    - fips_enabled|bool
