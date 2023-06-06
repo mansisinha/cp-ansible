@@ -1,0 +1,15 @@
+---
+- name: Perform integration testing with ansible-test
+  uses: ansible-community/ansible-test-gh-action@release/v1
+  with:
+    ansible-core-version: stable-2.12
+    pre-test-cmd: echo This runs before the ansible-test invocation
+    target-python-version: 3.9
+    controller-python-version: auto
+    testing-type: integration
+    test-deps: ansible.netcommon
+- name: Perform sanity testing with ansible-test
+  uses: ansible-community/ansible-test-gh-action@release/v1
+  with:
+    ansible-core-version: stable-2.12
+    testing-type: sanity
