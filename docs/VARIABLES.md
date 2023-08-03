@@ -8,7 +8,7 @@ Below are the supported variables for the role variables
 
 Version of Confluent Platform to install
 
-Default:  7.4.0
+Default:  7.4.1
 
 ***
 
@@ -958,7 +958,7 @@ Default:  "{{ssl_mutual_auth_enabled}}"
 
 ### kafka_controller_sasl_protocol
 
-SASL Mechanism for controller Server to Server and Server to Client Authentication. Options are none, kerberos, digest. Server to server auth only working for digest-md5
+SASL Mechanism for controller Server to Server and Server to Client Authentication. Options are plain, kerberos, none
 
 Default:  "{{sasl_protocol}}"
 
