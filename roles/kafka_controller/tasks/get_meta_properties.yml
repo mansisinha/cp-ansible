@@ -6,8 +6,17 @@
   register: uuid_key
   run_once: true
 
+# - name: Format Data Directory
+#   shell: "{{ binary_base_path }}/bin/kafka-storage  format -t {{ clusterid }} -c {{ kafka_controller.config_file }}  --ignore-formatted"
+#   register: format_meta
+#   vars:
+#     clusterid: "{{ uuid_key.stdout }}"
+
 - name: Format Data Directory
-  shell: "{{ binary_base_path }}/bin/kafka-storage  format -t {{ clusterid }} -c {{ kafka_controller.config_file }}  --ignore-formatted"
+  shell: "{{ binary_base_path }}/bin/kafka-storage  format -t {{ clusterid }} -c {{ kafka_controller.config_file }} \
+            --add-scram 'SCRAM-SHA-512=[name={{ sasl_scram_users_final['admin']['principal'] }},password={{ sasl_scram_users_final['admin']['password'] }}]' --ignore-formatted"
   register: format_meta
   vars:
     clusterid: "{{ uuid_key.stdout }}"
+  when:
+    - "'SCRAM-SHA-512' in kafka_controller_sasl_enabled_mechanisms"
