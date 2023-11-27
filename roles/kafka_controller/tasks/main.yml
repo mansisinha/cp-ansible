@@ -422,20 +422,6 @@
   tags:
     - systemd
 
-- name: Create SCRAM Users
-  shell: |
-    {{ binary_base_path }}/bin/kafka-configs \
-      --bootstrap-server {{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{kafka_controller_listeners['controller']['port']}} \
-      --command-config {{kafka_controller.client_config_file}} --alter \
-      --add-config 'SCRAM-SHA-512=[password={{ item.value['password'] }}]' \
-      --entity-type users --entity-name {{ item.value['principal'] }}
-  loop: "{{ sasl_scram_users_final|dict2items }}"
-  run_once: true
-  when:
-    - "'SCRAM-SHA-512' in kafka_controller_sasl_enabled_mechanisms"
-    - kraft_enabled|bool
-  no_log: false
-
 - name: Wait for Controller health checks to complete
   include_tasks: health_check.yml
   when:

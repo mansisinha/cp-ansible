@@ -33,9 +33,9 @@ all:
     # zookeeper_client_authentication_type: <none/mtls/digest/kerberos>
 
     #### Kafka Controller SASL Authentication ####
-    ## Controller can have Kerberos, Plain or Oauth Authentication
+    ## Controller can have Kerberos, Plain or no Authentication
     ## By default when sasl_protocol = kerberos, kafka_controller will also use sasl kerberos. It can  be configured with:
-    # kafka_controller_sasl_protocol: <none/kerberos/plain/oauth>
+    # kafka_controller_sasl_protocol: <none/kerberos/plain>
 
     #### Kerberos Configuration ####
     ## Applicable when sasl_protocol is kerberos
