@@ -391,6 +391,7 @@
   run_once: true
   when:
     - "'SCRAM-SHA-512' in kafka_broker_sasl_enabled_mechanisms"
+    - not kraft_enabled|bool
   no_log: "{{mask_secrets|bool}}"
 
 # Only supported when zookeeper is enabled
@@ -405,6 +406,7 @@
   run_once: true
   when:
     - "'SCRAM-SHA-256' in kafka_broker_sasl_enabled_mechanisms"
+    - not kraft_enabled|bool
   no_log: "{{ mask_sensitive_logs|bool }}"
 
 - name: Deploy JMX Exporter Config File
@@ -505,6 +507,36 @@
     state: started
   tags:
     - systemd
+
+# SCRAM users created in Kraft
+- name: Create SCRAM Users
+  shell: |
+    {{ binary_base_path }}/bin/kafka-configs \
+      --bootstrap-server {{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['port']}} \
+      --command-config {{kafka_broker.client_config_file}} --alter \
+      --add-config 'SCRAM-SHA-512=[password={{ item.value['password'] }}]' \
+      --entity-type users --entity-name {{ item.value['principal'] }}
+  loop: "{{ sasl_scram_users_final|dict2items }}"
+  run_once: true
+  when:
+    - "'SCRAM-SHA-512' in kafka_broker_sasl_enabled_mechanisms"
+    - kraft_enabled|bool
+  no_log: false
+
+# SCRAM 256 users created in Kraft
+- name: Create SCRAM 256 Users
+  shell: |
+    {{ binary_base_path }}/bin/kafka-configs \
+      --bootstrap-server {{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['port']}} \
+      --command-config {{kafka_broker.client_config_file}} --alter \
+      --add-config 'SCRAM-SHA-256=[password={{ item.value['password'] }}]' \
+      --entity-type users --entity-name {{ item.value['principal'] }}
+  loop: "{{ sasl_scram256_users_final|dict2items }}"
+  run_once: true
+  when:
+    - "'SCRAM-SHA-256' in kafka_broker_sasl_enabled_mechanisms"
+    - kraft_enabled|bool
+  no_log: false
 
 - name: Wait for Broker health checks to complete
   include_tasks: health_check.yml

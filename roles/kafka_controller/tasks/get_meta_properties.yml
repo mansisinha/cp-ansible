@@ -19,3 +19,24 @@
   register: format_meta
   vars:
     clusterid: "{{ (zoo_cluster['content'] | b64decode).partition('cluster.id=')[2].partition('\n')[0] if kraft_migration|bool else uuid_key.stdout }}"
+  when:
+    - not (kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'SCRAM-SHA-512')
+    - not (kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'SCRAM-SHA-256')
+
+- name: Format Data Directory with SCRAM credentials
+  shell: "{{ binary_base_path }}/bin/kafka-storage  format -t={{ clusterid }} -c {{ kafka_controller.config_file }} \
+            --add-scram 'SCRAM-SHA-512=[name={{ sasl_scram_users_final.admin.principal }},password={{ sasl_scram_users_final.admin.password }}]' --ignore-formatted"
+  register: format_meta
+  vars:
+    clusterid: "{{ uuid_key.stdout }}"
+  when:
+    - kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'SCRAM-SHA-512'
+
+- name: Format Data Directory with SCRAM 256 credentials
+  shell: "{{ binary_base_path }}/bin/kafka-storage  format -t={{ clusterid }} -c {{ kafka_controller.config_file }} \
+            --add-scram 'SCRAM-SHA-256=[name={{ sasl_scram256_users_final.admin.principal }},password={{ sasl_scram256_users_final.admin.password }}]' --ignore-formatted"
+  register: format_meta
+  vars:
+    clusterid: "{{ uuid_key.stdout }}"
+  when:
+    - kafka_broker_listeners[kafka_broker_inter_broker_listener_name]['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol == 'SCRAM-SHA-256'
