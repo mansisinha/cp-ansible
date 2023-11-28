@@ -182,15 +182,15 @@ kafka_controller_properties:
     properties:
       zookeeper.set.acl: 'true'
   migration_broker_listener:
-    enabled: "{{ sasl_protocol=='plain' and kraft_migration|bool }}"
+    enabled: "{{ sasl_protocol != 'none' and kraft_migration|bool }}"
     properties: "{{  {'broker_listener': kafka_broker_listeners[kafka_broker_inter_broker_listener_name]} | confluent.platform.listener_properties(ssl_enabled, fips_enabled, ssl_mutual_auth_enabled, sasl_protocol,
                     kafka_controller_truststore_path, kafka_controller_truststore_storepass, kafka_controller_keystore_path, kafka_controller_keystore_storepass, kafka_controller_keystore_keypass,
                     plain_jaas_config, kafka_controller_keytab_path, kafka_controller_kerberos_principal|default('kafka'), kerberos_kafka_controller_primary,
                     sasl_scram_users_final.admin.principal, sasl_scram_users_final.admin.password, sasl_scram256_users_final.admin.principal, sasl_scram256_users_final.admin.password, rbac_enabled_public_pem_path ) }}"
   kraft_sasl_protocol:
-    enabled: "{{ kafka_controller_listeners['controller']['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol != 'none' }}"
+    enabled: "{{ kafka_controller_listeners['controller']['sasl_protocol'] | default(kafka_controller_sasl_protocol) | confluent.platform.normalize_sasl_protocol != 'none' }}"
     properties:
-      sasl.mechanism.controller.protocol: "{{kafka_controller_listeners['controller']['sasl_protocol'] | default(sasl_protocol) | confluent.platform.normalize_sasl_protocol}}"
+      sasl.mechanism.controller.protocol: "{{kafka_controller_listeners['controller']['sasl_protocol'] | default(kafka_controller_sasl_protocol) | confluent.platform.normalize_sasl_protocol}}"
   ssl:
     enabled: "{{ kafka_controller_listeners | confluent.platform.ssl_required(kafka_controller_ssl_enabled) }}"
     properties:

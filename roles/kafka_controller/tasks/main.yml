@@ -34,6 +34,13 @@
       - kafka_controller_final_properties['log.dirs'] != "/" and not ',' in kafka_controller_final_properties['log.dirs']
     fail_msg: "If you have log.dirs in kafka_controller_custom_properties, make sure you only provide one directory."
 
+# SCRAM authentication is not supported in Controller listener
+- name: Assert that Kraft Controller SASL protocol is not SCRAM
+  assert:
+    that:
+      - kafka_controller_sasl_protocol != ('scram' or 'scram256')
+    fail_msg: "SCRAM Authentication between Kraft Controllers is not yet supported. Supported SASL protocols are plain,kerberos,none"
+
 - name: Stop Service and Remove Packages on Version Change
   include_role:
     name: common
