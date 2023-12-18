@@ -33,7 +33,7 @@ kafka_broker_jolokia_urp_url: "{{ 'https' if kafka_broker_jolokia_ssl_enabled|bo
 kafka_broker_jolokia_active_controller_url: "{{ 'https' if kafka_broker_jolokia_ssl_enabled|bool else 'http' }}://{{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{kafka_broker_jolokia_port}}/jolokia/read/kafka.controller:type=KafkaController,name=ActiveControllerCount"
 
 #### Zookeeper Variables ####
-zookeeper_service_name: confluent-zookeeper
+
 zookeeper_main_package: "{{ 'confluent-server' if confluent_server_enabled|bool else 'confluent-kafka'}}"
 zookeeper_default_user: cp-kafka
 zookeeper_default_group: confluent
@@ -41,7 +41,7 @@ zookeeper_default_log_dir: /var/log/kafka
 zookeeper:
   server_start_file: "{{ binary_base_path }}/bin/zookeeper-server-start"
   config_file: "{{ (config_base_path, zookeeper_config_prefix_path, 'zookeeper.properties') | path_join }}"
-  systemd_file: "{{systemd_base_dir}}/{{zookeeper_service_name}}.service"
+  systemd_file: "{{systemd_base_dir}}/confluent-zookeeper.service"
   systemd_override: /etc/systemd/system/{{zookeeper_service_name}}.service.d/override.conf
   log4j_file: "{{ (base_path, 'etc/kafka/zookeeper-log4j.properties' ) | path_join }}"
   jaas_file: "{{ (config_base_path, zookeeper_config_prefix_path, 'zookeeper_jaas.conf') | path_join }}"

@@ -89,10 +89,10 @@
   copy:
     src: "{{binary_base_path}}/lib/systemd/system/{{zookeeper.systemd_file|basename}}"
     remote_src: true
-    dest: "{{zookeeper.systemd_file}}"
+    dest: "{{systemd_base_dir}}/{{zookeeper_service_name}}.service"
     mode: '644'
     force: true
-  when: installation_method == "archive"
+  #when: installation_method == "archive"
   tags:
     - systemd
 

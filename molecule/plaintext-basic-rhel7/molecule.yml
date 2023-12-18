@@ -122,7 +122,7 @@ provisioner:
       all:
         scenario_name: plaintext-basic-rhel7
         custom_java_path: /opt/jdk17    # Use custom java 17
-
+        zookeeper_service_name: confluent-zk
         # Kafka Rest API Basic Auth
         kafka_broker_rest_proxy_authentication_type: basic
         schema_registry_authentication_type: basic
