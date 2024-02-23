@@ -52,6 +52,51 @@
     - rbac_enabled|bool and not external_mds_enabled|bool
     # Skip if any previous check failed
     - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False)
+    - not oauth_enabled
+
+- name: get token
+  uri:
+    url: "https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7/v1/token"
+    method: POST
+    validate_certs: false
+    return_content: true
+    status_code: 200
+    url_username: "0oa96pg3lgnBnhY9w5d7"
+    url_password: "dshcfgYYnMWhFGIuLzNFQJPhichIRUHgYz9jjRKZLjTV0s97Jueji_8tIjfzExWH"
+    force_basic_auth: true
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    body_format: form-urlencoded
+    body:
+      - ["grant_type", "client_credentials"]
+      - ["scope", "groups"]
+  register: mds_token
+  until: mds_token.status == 200
+  retries: 10
+  delay: 5
+  when:
+    - rbac_enabled|bool and not external_mds_enabled|bool
+    - oauth_enabled|bool
+
+- name: get req
+  uri:
+    url: "{{mds_http_protocol}}://{{ mds_advertised_listener_hostname | default(hostvars[inventory_hostname]|confluent.platform.resolve_hostname, True) }}:{{mds_port}}/security/1.0/authenticate"
+    validate_certs: false
+    return_content: true
+    status_code: 200
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{(mds_token.content | from_json).access_token}}"
+  register: mds_result
+  until: mds_result.status == 200
+  retries: 10
+  delay: 5
+  when:
+      - rbac_enabled|bool and not external_mds_enabled|bool
+      - oauth_enabled|bool
+
+- debug:
+    msg: "{{mds_result}}"
 
 - name: Wait for Embedded Rest Proxy to start
   uri:

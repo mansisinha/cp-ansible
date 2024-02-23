@@ -14,7 +14,51 @@
   until: cluster_id_query.status == 200
   retries: "{{ mds_retries }}"
   delay: 10
-  when: cluster_id_source | default('erp') == 'erp'
+  when:
+    - cluster_id_source | default('erp') == 'erp'
+    - not oauth_enabled
+
+- name: get token
+  uri:
+    url: "https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7/v1/token"
+    method: POST
+    validate_certs: false
+    return_content: true
+    status_code: 200
+    url_username: "0oa96pg3lgnBnhY9w5d7"
+    url_password: "dshcfgYYnMWhFGIuLzNFQJPhichIRUHgYz9jjRKZLjTV0s97Jueji_8tIjfzExWH"
+    force_basic_auth: true
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    body_format: form-urlencoded
+    body:
+      - ["grant_type", "client_credentials"]
+      - ["scope", "groups"]
+  register: mds_token
+  until: mds_token.status == 200
+  retries: 10
+  delay: 5
+  when:
+    - cluster_id_source | default('erp') == 'erp'
+    - oauth_enabled|bool
+
+- name: Get Kafka Cluster ID from Embedded Rest Proxy # Not supported in 7.6
+  uri:
+    url: "{{mds_http_protocol}}://{{ hostvars[groups['kafka_broker'][0]] | confluent.platform.resolve_hostname }}:{{mds_port}}/kafka/v3/clusters"
+    method: GET
+    validate_certs: false
+    return_content: true
+    status_code: 200
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{(mds_token.content | from_json).access_token}}"
+  register: cluster_id_query
+  until: cluster_id_query.status == 200
+  retries: "{{ mds_retries }}"
+  delay: 10
+  when: 
+    - cluster_id_source | default('erp') == 'erp'
+    - oauth_enabled|bool
 
 - name: Parse Kafka Cluster ID from json query
   set_fact:

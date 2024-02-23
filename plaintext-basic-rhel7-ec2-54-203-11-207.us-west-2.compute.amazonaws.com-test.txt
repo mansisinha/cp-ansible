@@ -1,0 +1,817 @@
+/home/centos/.local/lib/python3.6/site-packages/requests/__init__.py:104: RequestsDependencyWarning: urllib3 (1.26.14) or chardet (5.0.0)/charset_normalizer (2.0.12) doesn't match a supported version!
+  RequestsDependencyWarning)
+DEBUG: ANSIBLE ENVIRONMENT:
+ANSIBLE_ASYNC_DIR: ~/.ansible_async
+ANSIBLE_COLLECTIONS_PATH: ../../
+ANSIBLE_CONFIG: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/ansible.cfg
+ANSIBLE_FILTER_PLUGINS: /home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/filter:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/plugins/filter:/home/centos/repos/ansible_collections/confluent/platform/plugins/filter:/home/centos/.ansible/plugins/filter:/usr/share/ansible/plugins/filter
+ANSIBLE_LIBRARY: /home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/modules:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/library:/home/centos/repos/ansible_collections/confluent/platform/library:/home/centos/.ansible/plugins/modules:/usr/share/ansible/plugins/modules
+ANSIBLE_ROLES_PATH: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/roles:/home/centos/repos/ansible_collections/confluent:/home/centos/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles::/home/centos/repos/ansible_collections/confluent/platform/test_roles
+
+DEBUG: MOLECULE ENVIRONMENT:
+MOLECULE_DEBUG: 'True'
+MOLECULE_DEPENDENCY_NAME: galaxy
+MOLECULE_DRIVER_NAME: docker
+MOLECULE_ENV_FILE: /home/centos/repos/ansible_collections/confluent/platform/.env.yml
+MOLECULE_EPHEMERAL_DIRECTORY: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7
+MOLECULE_FILE: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/molecule.yml
+MOLECULE_INSTANCE_CONFIG: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/instance_config.yml
+MOLECULE_INVENTORY_FILE: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/inventory/ansible_inventory.yml
+MOLECULE_PROJECT_DIRECTORY: /home/centos/repos/ansible_collections/confluent/platform
+MOLECULE_PROVISIONER_NAME: ansible
+MOLECULE_SCENARIO_DIRECTORY: /home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7
+MOLECULE_SCENARIO_NAME: plaintext-basic-rhel7
+MOLECULE_STATE_FILE: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/state.yml
+MOLECULE_VERIFIER_NAME: ansible
+MOLECULE_VERIFIER_TEST_DIRECTORY: /home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7/tests
+
+DEBUG: SHELL REPLAY:
+ANSIBLE_ASYNC_DIR=~/.ansible_async ANSIBLE_COLLECTIONS_PATH=../../ ANSIBLE_CONFIG=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/ansible.cfg ANSIBLE_FILTER_PLUGINS=/home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/filter:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/plugins/filter:/home/centos/repos/ansible_collections/confluent/platform/plugins/filter:/home/centos/.ansible/plugins/filter:/usr/share/ansible/plugins/filter ANSIBLE_LIBRARY=/home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/modules:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/library:/home/centos/repos/ansible_collections/confluent/platform/library:/home/centos/.ansible/plugins/modules:/usr/share/ansible/plugins/modules ANSIBLE_ROLES_PATH=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/roles:/home/centos/repos/ansible_collections/confluent:/home/centos/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles::/home/centos/repos/ansible_collections/confluent/platform/test_roles MOLECULE_DEBUG=True MOLECULE_DEPENDENCY_NAME=galaxy MOLECULE_DRIVER_NAME=docker MOLECULE_ENV_FILE=/home/centos/repos/ansible_collections/confluent/platform/.env.yml MOLECULE_EPHEMERAL_DIRECTORY=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7 MOLECULE_FILE=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/molecule.yml MOLECULE_INSTANCE_CONFIG=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/instance_config.yml MOLECULE_INVENTORY_FILE=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/inventory/ansible_inventory.yml MOLECULE_PROJECT_DIRECTORY=/home/centos/repos/ansible_collections/confluent/platform MOLECULE_PROVISIONER_NAME=ansible MOLECULE_SCENARIO_DIRECTORY=/home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7 MOLECULE_SCENARIO_NAME=plaintext-basic-rhel7 MOLECULE_STATE_FILE=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/state.yml MOLECULE_VERIFIER_NAME=ansible MOLECULE_VERIFIER_TEST_DIRECTORY=/home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7/tests
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the
+controller starting with Ansible 2.12. Current version: 3.6.8 (default, Nov 16
+2020, 16:55:22) [GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]. This feature will be
+removed from ansible-core in version 2.12. Deprecation warnings can be disabled
+ by setting deprecation_warnings=False in ansible.cfg.
+
+PLAY [Create] ******************************************************************
+
+TASK [Log into a Docker registry] **********************************************
+/home/centos/.local/lib/python3.6/site-packages/ansible/parsing/vault/__init__.py:44: CryptographyDeprecationWarning: Python 3.6 is no longer supported by the Python core team. Therefore, support for it is deprecated in cryptography. The next release of cryptography (40.0) will be the last to support Python 3.6.
+  from cryptography.exceptions import InvalidSignature
+skipping: [localhost] => (item=None)
+skipping: [localhost] => (item=None)
+skipping: [localhost] => (item=None)
+skipping: [localhost] => (item=None)
+skipping: [localhost] => (item=None)
+skipping: [localhost] => (item=None)
+skipping: [localhost] => (item=None)
+skipping: [localhost] => (item=None)
+skipping: [localhost]
+
+TASK [Check presence of custom Dockerfiles] ************************************
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['zookeeper', 'zookeeper_migration'], 'hostname': 'zookeeper1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'zookeeper1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_broker', 'kafka_broker_migration'], 'hostname': 'kafka-broker1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-broker1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['schema_registry', 'schema_registry_migration'], 'hostname': 'schema-registry1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'schema-registry1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_rest', 'kafka_rest_migration'], 'hostname': 'kafka-rest1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-rest1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_connect', 'kafka_connect_migration'], 'hostname': 'kafka-connect1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-connect1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['ksql', 'ksql_migration'], 'hostname': 'ksql1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'ksql1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['control_center', 'control_center_migration'], 'hostname': 'control-center1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'control-center1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'published_ports': ['9021:9021'], 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_controller_migration'], 'hostname': 'controller1-mig.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'controller1-mig', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+
+TASK [Create Dockerfiles from image names] *************************************
+--- before
++++ after: /home/centos/.ansible/tmp/ansible-local-14252uyo54sd7/tmpcxtby_s5/Dockerfile-rhel7-java17.j2
+@@ -0,0 +1,13 @@
++FROM geerlingguy/docker-centos7-ansible
++
++# Download Java using wget
++
++RUN yum -y install wget curl
++RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
++RUN tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
++RUN sudo mv jdk-17.0.2/ /opt/jdk17/
++RUN rm -rf openjdk-17.0.2_linux-x64_bin.tar.gz
++
++RUN yum -y install rsync \
++      openssl
++
+
+changed: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['zookeeper', 'zookeeper_migration'], 'hostname': 'zookeeper1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'zookeeper1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_broker', 'kafka_broker_migration'], 'hostname': 'kafka-broker1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-broker1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['schema_registry', 'schema_registry_migration'], 'hostname': 'schema-registry1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'schema-registry1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_rest', 'kafka_rest_migration'], 'hostname': 'kafka-rest1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-rest1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_connect', 'kafka_connect_migration'], 'hostname': 'kafka-connect1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-connect1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['ksql', 'ksql_migration'], 'hostname': 'ksql1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'ksql1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['control_center', 'control_center_migration'], 'hostname': 'control-center1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'control-center1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'published_ports': ['9021:9021'], 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_controller_migration'], 'hostname': 'controller1-mig.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'controller1-mig', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+
+TASK [Discover local Docker images] ********************************************
+ok: [localhost] => (item={'diff': [{'before': '', 'after_header': '/home/centos/.ansible/tmp/ansible-local-14252uyo54sd7/tmpcxtby_s5/Dockerfile-rhel7-java17.j2', 'after': 'FROM geerlingguy/docker-centos7-ansible\n\n# Download Java using wget\n\nRUN yum -y install wget curl\nRUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz\nRUN tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz\nRUN sudo mv jdk-17.0.2/ /opt/jdk17/\nRUN rm -rf openjdk-17.0.2_linux-x64_bin.tar.gz\n\nRUN yum -y install rsync \\\n      openssl\n\n'}], 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'src': '/home/centos/.ansible/tmp/ansible-tmp-1708579414.617707-14456-231418842056037/source', 'md5sum': 'a67439bf08bcc5899dda56e5dcee28a4', 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'changed': True, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'src': '/home/centos/.ansible/tmp/ansible-tmp-1708579414.617707-14456-231418842056037/source', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'mode': '0600', 'follow': False, '_original_basename': 'Dockerfile-rhel7-java17.j2', 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'backup': False, 'force': True, 'unsafe_writes': False, 'content': None, 'validate': None, 'directory_mode': None, 'remote_src': None, 'local_follow': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['zookeeper', 'zookeeper_migration'], 'hostname': 'zookeeper1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'zookeeper1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 0, 'ansible_index_var': 'i'})
+ok: [localhost] => (item={'diff': {'before': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}, 'after': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}}, 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'changed': False, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'mode': '0600', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', '_original_basename': 'Dockerfile-rhel7-java17.j2', 'recurse': False, 'state': 'file', 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'force': False, 'follow': True, 'modification_time_format': '%Y%m%d%H%M.%S', 'access_time_format': '%Y%m%d%H%M.%S', 'unsafe_writes': False, '_diff_peek': None, 'src': None, 'modification_time': None, 'access_time': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_broker', 'kafka_broker_migration'], 'hostname': 'kafka-broker1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-broker1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 1, 'ansible_index_var': 'i'})
+ok: [localhost] => (item={'diff': {'before': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}, 'after': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}}, 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'changed': False, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'mode': '0600', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', '_original_basename': 'Dockerfile-rhel7-java17.j2', 'recurse': False, 'state': 'file', 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'force': False, 'follow': True, 'modification_time_format': '%Y%m%d%H%M.%S', 'access_time_format': '%Y%m%d%H%M.%S', 'unsafe_writes': False, '_diff_peek': None, 'src': None, 'modification_time': None, 'access_time': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['schema_registry', 'schema_registry_migration'], 'hostname': 'schema-registry1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'schema-registry1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 2, 'ansible_index_var': 'i'})
+ok: [localhost] => (item={'diff': {'before': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}, 'after': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}}, 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'changed': False, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'mode': '0600', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', '_original_basename': 'Dockerfile-rhel7-java17.j2', 'recurse': False, 'state': 'file', 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'force': False, 'follow': True, 'modification_time_format': '%Y%m%d%H%M.%S', 'access_time_format': '%Y%m%d%H%M.%S', 'unsafe_writes': False, '_diff_peek': None, 'src': None, 'modification_time': None, 'access_time': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_rest', 'kafka_rest_migration'], 'hostname': 'kafka-rest1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-rest1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 3, 'ansible_index_var': 'i'})
+ok: [localhost] => (item={'diff': {'before': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}, 'after': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}}, 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'changed': False, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'mode': '0600', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', '_original_basename': 'Dockerfile-rhel7-java17.j2', 'recurse': False, 'state': 'file', 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'force': False, 'follow': True, 'modification_time_format': '%Y%m%d%H%M.%S', 'access_time_format': '%Y%m%d%H%M.%S', 'unsafe_writes': False, '_diff_peek': None, 'src': None, 'modification_time': None, 'access_time': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_connect', 'kafka_connect_migration'], 'hostname': 'kafka-connect1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-connect1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 4, 'ansible_index_var': 'i'})
+ok: [localhost] => (item={'diff': {'before': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}, 'after': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}}, 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'changed': False, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'mode': '0600', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', '_original_basename': 'Dockerfile-rhel7-java17.j2', 'recurse': False, 'state': 'file', 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'force': False, 'follow': True, 'modification_time_format': '%Y%m%d%H%M.%S', 'access_time_format': '%Y%m%d%H%M.%S', 'unsafe_writes': False, '_diff_peek': None, 'src': None, 'modification_time': None, 'access_time': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['ksql', 'ksql_migration'], 'hostname': 'ksql1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'ksql1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 5, 'ansible_index_var': 'i'})
+ok: [localhost] => (item={'diff': {'before': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}, 'after': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}}, 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'changed': False, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'mode': '0600', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', '_original_basename': 'Dockerfile-rhel7-java17.j2', 'recurse': False, 'state': 'file', 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'force': False, 'follow': True, 'modification_time_format': '%Y%m%d%H%M.%S', 'access_time_format': '%Y%m%d%H%M.%S', 'unsafe_writes': False, '_diff_peek': None, 'src': None, 'modification_time': None, 'access_time': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['control_center', 'control_center_migration'], 'hostname': 'control-center1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'control-center1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'published_ports': ['9021:9021'], 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 6, 'ansible_index_var': 'i'})
+ok: [localhost] => (item={'diff': {'before': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}, 'after': {'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible'}}, 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'changed': False, 'uid': 1000, 'gid': 1000, 'owner': 'centos', 'group': 'centos', 'mode': '0600', 'state': 'file', 'secontext': 'unconfined_u:object_r:cache_home_t:s0', 'size': 400, 'invocation': {'module_args': {'mode': '0600', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', '_original_basename': 'Dockerfile-rhel7-java17.j2', 'recurse': False, 'state': 'file', 'path': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'force': False, 'follow': True, 'modification_time_format': '%Y%m%d%H%M.%S', 'access_time_format': '%Y%m%d%H%M.%S', 'unsafe_writes': False, '_diff_peek': None, 'src': None, 'modification_time': None, 'access_time': None, 'owner': None, 'group': None, 'seuser': None, 'serole': None, 'selevel': None, 'setype': None, 'attributes': None}}, 'checksum': '85d5e31ab8088a322af2fdcdff79fe43f6a22e9d', 'dest': '/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/Dockerfile_geerlingguy_docker_centos7_ansible', 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_controller_migration'], 'hostname': 'controller1-mig.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'controller1-mig', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item', 'i': 7, 'ansible_index_var': 'i'})
+
+TASK [Build an Ansible compatible image (new)] *********************************
+changed: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+ok: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+ok: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+ok: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+ok: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+ok: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+ok: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+ok: [localhost] => (item=molecule_local/geerlingguy/docker-centos7-ansible)
+
+TASK [Create docker network(s)] ************************************************
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+included: /home/centos/.local/lib/python3.6/site-packages/molecule_docker/playbooks/tasks/create_network.yml for localhost => (item=confluent)
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+--- before
++++ after
+@@ -1,3 +1,3 @@
+ {
+-    "exists": false
++    "exists": true
+ }
+
+changed: [localhost]
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+skipping: [localhost]
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+skipping: [localhost]
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+skipping: [localhost]
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+skipping: [localhost]
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+skipping: [localhost]
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+skipping: [localhost]
+
+TASK [Check if network exist] **************************************************
+ok: [localhost]
+
+TASK [Create docker network(s)] ************************************************
+skipping: [localhost]
+
+TASK [Determine the CMD directives] ********************************************
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['zookeeper', 'zookeeper_migration'], 'hostname': 'zookeeper1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'zookeeper1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_broker', 'kafka_broker_migration'], 'hostname': 'kafka-broker1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-broker1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['schema_registry', 'schema_registry_migration'], 'hostname': 'schema-registry1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'schema-registry1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_rest', 'kafka_rest_migration'], 'hostname': 'kafka-rest1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-rest1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_connect', 'kafka_connect_migration'], 'hostname': 'kafka-connect1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-connect1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['ksql', 'ksql_migration'], 'hostname': 'ksql1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'ksql1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['control_center', 'control_center_migration'], 'hostname': 'control-center1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'control-center1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'published_ports': ['9021:9021'], 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+ok: [localhost] => (item={'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_controller_migration'], 'hostname': 'controller1-mig.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'controller1-mig', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']})
+
+TASK [Create molecule instance(s)] *********************************************
+changed: [localhost] => (item=zookeeper1)
+changed: [localhost] => (item=kafka-broker1)
+changed: [localhost] => (item=schema-registry1)
+changed: [localhost] => (item=kafka-rest1)
+changed: [localhost] => (item=kafka-connect1)
+changed: [localhost] => (item=ksql1)
+changed: [localhost] => (item=control-center1)
+changed: [localhost] => (item=controller1-mig)
+
+TASK [Wait for instance(s) creation to complete] *******************************
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '996277368197.17021', 'results_file': '/home/centos/.ansible_async/996277368197.17021', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['zookeeper', 'zookeeper_migration'], 'hostname': 'zookeeper1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'zookeeper1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '83539518258.17046', 'results_file': '/home/centos/.ansible_async/83539518258.17046', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_broker', 'kafka_broker_migration'], 'hostname': 'kafka-broker1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-broker1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '867499418937.17090', 'results_file': '/home/centos/.ansible_async/867499418937.17090', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['schema_registry', 'schema_registry_migration'], 'hostname': 'schema-registry1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'schema-registry1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '203077496755.17128', 'results_file': '/home/centos/.ansible_async/203077496755.17128', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_rest', 'kafka_rest_migration'], 'hostname': 'kafka-rest1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-rest1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '897921843131.17324', 'results_file': '/home/centos/.ansible_async/897921843131.17324', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_connect', 'kafka_connect_migration'], 'hostname': 'kafka-connect1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'kafka-connect1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '46992489113.17507', 'results_file': '/home/centos/.ansible_async/46992489113.17507', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['ksql', 'ksql_migration'], 'hostname': 'ksql1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'ksql1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '355345152656.17682', 'results_file': '/home/centos/.ansible_async/355345152656.17682', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['control_center', 'control_center_migration'], 'hostname': 'control-center1.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'control-center1', 'networks': [{'name': 'confluent'}], 'privileged': True, 'published_ports': ['9021:9021'], 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "exists": false,
+-    "running": false
++    "exists": true,
++    "running": true
+ }
+
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '324050425030.17833', 'results_file': '/home/centos/.ansible_async/324050425030.17833', 'changed': True, 'failed': False, 'item': {'command': '', 'dockerfile': '../Dockerfile-rhel7-java17.j2', 'groups': ['kafka_controller_migration'], 'hostname': 'controller1-mig.confluent', 'image': 'geerlingguy/docker-centos7-ansible', 'name': 'controller1-mig', 'networks': [{'name': 'confluent'}], 'privileged': True, 'volumes': ['/sys/fs/cgroup:/sys/fs/cgroup:ro']}, 'ansible_loop_var': 'item'})
+[DEPRECATION WARNING]: Please note that the default value for `network_mode`
+will change from not specified (which is equal to `default`) to the name of the
+ first network in `networks` if `networks` has at least one entry and
+`networks_cli_compatible` is `true`. You can change the behavior now by
+explicitly setting `network_mode` to the name of the first network in
+`networks`, and remove this warning by setting `network_mode` to `default`.
+Please make sure that the value you set to `network_mode` equals the inspection
+ result for existing containers, otherwise the module will recreate them. You
+can find out the correct value by running "docker inspect --format
+'{{.HostConfig.NetworkMode}}' <container_name>". This feature will be removed
+from community.docker in version 2.0.0. Deprecation warnings can be disabled by
+ setting deprecation_warnings=False in ansible.cfg.
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=24   changed=5    unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
+
+DEBUG: ANSIBLE ENVIRONMENT:
+ANSIBLE_ASYNC_DIR: ~/.ansible_async
+ANSIBLE_COLLECTIONS_PATH: ../../
+ANSIBLE_CONFIG: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/ansible.cfg
+ANSIBLE_FILTER_PLUGINS: /home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/filter:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/plugins/filter:/home/centos/repos/ansible_collections/confluent/platform/plugins/filter:/home/centos/.ansible/plugins/filter:/usr/share/ansible/plugins/filter
+ANSIBLE_LIBRARY: /home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/modules:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/library:/home/centos/repos/ansible_collections/confluent/platform/library:/home/centos/.ansible/plugins/modules:/usr/share/ansible/plugins/modules
+ANSIBLE_ROLES_PATH: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/roles:/home/centos/repos/ansible_collections/confluent:/home/centos/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles::/home/centos/repos/ansible_collections/confluent/platform/test_roles
+
+DEBUG: MOLECULE ENVIRONMENT:
+MOLECULE_DEBUG: 'True'
+MOLECULE_DEPENDENCY_NAME: galaxy
+MOLECULE_DRIVER_NAME: docker
+MOLECULE_ENV_FILE: /home/centos/repos/ansible_collections/confluent/platform/.env.yml
+MOLECULE_EPHEMERAL_DIRECTORY: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7
+MOLECULE_FILE: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/molecule.yml
+MOLECULE_INSTANCE_CONFIG: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/instance_config.yml
+MOLECULE_INVENTORY_FILE: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/inventory/ansible_inventory.yml
+MOLECULE_PROJECT_DIRECTORY: /home/centos/repos/ansible_collections/confluent/platform
+MOLECULE_PROVISIONER_NAME: ansible
+MOLECULE_SCENARIO_DIRECTORY: /home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7
+MOLECULE_SCENARIO_NAME: plaintext-basic-rhel7
+MOLECULE_STATE_FILE: /home/centos/.cache/molecule/platform/plaintext-basic-rhel7/state.yml
+MOLECULE_VERIFIER_NAME: ansible
+MOLECULE_VERIFIER_TEST_DIRECTORY: /home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7/tests
+
+DEBUG: SHELL REPLAY:
+ANSIBLE_ASYNC_DIR=~/.ansible_async ANSIBLE_COLLECTIONS_PATH=../../ ANSIBLE_CONFIG=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/ansible.cfg ANSIBLE_FILTER_PLUGINS=/home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/filter:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/plugins/filter:/home/centos/repos/ansible_collections/confluent/platform/plugins/filter:/home/centos/.ansible/plugins/filter:/usr/share/ansible/plugins/filter ANSIBLE_LIBRARY=/home/centos/.local/lib/python3.6/site-packages/molecule/provisioner/ansible/plugins/modules:/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/library:/home/centos/repos/ansible_collections/confluent/platform/library:/home/centos/.ansible/plugins/modules:/usr/share/ansible/plugins/modules ANSIBLE_ROLES_PATH=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/roles:/home/centos/repos/ansible_collections/confluent:/home/centos/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles::/home/centos/repos/ansible_collections/confluent/platform/test_roles MOLECULE_DEBUG=True MOLECULE_DEPENDENCY_NAME=galaxy MOLECULE_DRIVER_NAME=docker MOLECULE_ENV_FILE=/home/centos/repos/ansible_collections/confluent/platform/.env.yml MOLECULE_EPHEMERAL_DIRECTORY=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7 MOLECULE_FILE=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/molecule.yml MOLECULE_INSTANCE_CONFIG=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/instance_config.yml MOLECULE_INVENTORY_FILE=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/inventory/ansible_inventory.yml MOLECULE_PROJECT_DIRECTORY=/home/centos/repos/ansible_collections/confluent/platform MOLECULE_PROVISIONER_NAME=ansible MOLECULE_SCENARIO_DIRECTORY=/home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7 MOLECULE_SCENARIO_NAME=plaintext-basic-rhel7 MOLECULE_STATE_FILE=/home/centos/.cache/molecule/platform/plaintext-basic-rhel7/state.yml MOLECULE_VERIFIER_NAME=ansible MOLECULE_VERIFIER_TEST_DIRECTORY=/home/centos/repos/ansible_collections/confluent/platform/molecule/plaintext-basic-rhel7/tests
+
+[DEPRECATION WARNING]: Ansible will require Python 3.8 or newer on the
+controller starting with Ansible 2.12. Current version: 3.6.8 (default, Nov 16
+2020, 16:55:22) [GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]. This feature will be
+removed from ansible-core in version 2.12. Deprecation warnings can be disabled
+ by setting deprecation_warnings=False in ansible.cfg.
+/home/centos/.local/lib/python3.6/site-packages/ansible/parsing/vault/__init__.py:44: CryptographyDeprecationWarning: Python 3.6 is no longer supported by the Python core team. Therefore, support for it is deprecated in cryptography. The next release of cryptography (40.0) will be the last to support Python 3.6.
+  from cryptography.exceptions import InvalidSignature
+[WARNING]: Collection confluent.platform does not support Ansible version
+2.11.12
+[WARNING]: running playbook inside collection confluent.platform
+[WARNING]: Could not match supplied host pattern, ignoring: kafka_controller
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_connect_replicator
+
+PLAY [Host Prerequisites] ******************************************************
+
+TASK [Create Certificate Authority and Copy to Ansible Host] *******************
+skipping: [zookeeper1]
+
+TASK [confluent.platform.common : Confirm Hash Merging Enabled] ****************
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Verify Ansible version] **********************
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Check the presence of Controller and Zookeeper] ***
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Gather OS Facts] *****************************
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Red Hat Repo Setup and Java Installation] ****
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Ubuntu Repo Setup and Java Installation] *****
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Debian Repo Setup and Java Installation] *****
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Config Validations] **************************
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Create Confluent Platform install directory] ***
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Expand remote Confluent Platform archive] ****
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [kafka-connect1]
+skipping: [schema-registry1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Create Jolokia directory] ********************
+skipping: [zookeeper1] => (item=zookeeper)
+skipping: [zookeeper1] => (item=zookeeper_migration)
+skipping: [kafka-broker1] => (item=kafka_broker)
+skipping: [kafka-broker1] => (item=kafka_broker_migration)
+skipping: [schema-registry1] => (item=schema_registry)
+skipping: [schema-registry1] => (item=schema_registry_migration)
+skipping: [kafka-connect1] => (item=kafka_connect)
+skipping: [kafka-connect1] => (item=kafka_connect_migration)
+skipping: [ksql1] => (item=ksql)
+skipping: [ksql1] => (item=ksql_migration)
+skipping: [kafka-rest1] => (item=kafka_rest)
+skipping: [kafka-rest1] => (item=kafka_rest_migration)
+skipping: [control-center1] => (item=control_center)
+skipping: [control-center1] => (item=control_center_migration)
+
+TASK [confluent.platform.common : Copy Jolokia Jar] ****************************
+skipping: [zookeeper1] => (item=zookeeper)
+skipping: [kafka-broker1] => (item=kafka_broker)
+skipping: [zookeeper1] => (item=zookeeper_migration)
+skipping: [kafka-broker1] => (item=kafka_broker_migration)
+skipping: [schema-registry1] => (item=schema_registry)
+skipping: [schema-registry1] => (item=schema_registry_migration)
+skipping: [ksql1] => (item=ksql)
+skipping: [kafka-connect1] => (item=kafka_connect)
+skipping: [ksql1] => (item=ksql_migration)
+skipping: [kafka-connect1] => (item=kafka_connect_migration)
+skipping: [control-center1] => (item=control_center)
+skipping: [control-center1] => (item=control_center_migration)
+skipping: [kafka-rest1] => (item=kafka_rest)
+skipping: [kafka-rest1] => (item=kafka_rest_migration)
+
+TASK [confluent.platform.common : Download Jolokia Jar] ************************
+skipping: [zookeeper1] => (item=zookeeper)
+skipping: [zookeeper1] => (item=zookeeper_migration)
+skipping: [kafka-broker1] => (item=kafka_broker)
+skipping: [kafka-broker1] => (item=kafka_broker_migration)
+skipping: [schema-registry1] => (item=schema_registry)
+skipping: [schema-registry1] => (item=schema_registry_migration)
+skipping: [kafka-connect1] => (item=kafka_connect)
+skipping: [kafka-connect1] => (item=kafka_connect_migration)
+skipping: [ksql1] => (item=ksql)
+skipping: [ksql1] => (item=ksql_migration)
+skipping: [control-center1] => (item=control_center)
+skipping: [control-center1] => (item=control_center_migration)
+skipping: [kafka-rest1] => (item=kafka_rest)
+skipping: [kafka-rest1] => (item=kafka_rest_migration)
+
+TASK [confluent.platform.common : Create Prometheus install directory] *********
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Copy Prometheus Jar] *************************
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Download Prometheus JMX Exporter Jar] ********
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : Install Confluent CLI] ***********************
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+TASK [confluent.platform.common : set_fact] ************************************
+skipping: [zookeeper1]
+skipping: [kafka-broker1]
+skipping: [schema-registry1]
+skipping: [kafka-connect1]
+skipping: [ksql1]
+skipping: [control-center1]
+skipping: [kafka-rest1]
+
+PLAY [Zookeeper Status Finding] ************************************************
+
+TASK [Populate service facts] **************************************************
+skipping: [zookeeper1]
+
+TASK [Determine Installation Pattern - Parallel or Serial] *********************
+skipping: [zookeeper1]
+
+TASK [Group Hosts by Installation Pattern] *************************************
+skipping: [zookeeper1]
+[WARNING]: Could not match supplied host pattern, ignoring: zookeeper_parallel
+
+PLAY [Zookeeper Parallel Provisioning] *****************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring: zookeeper_serial
+
+PLAY [Zookeeper Serial Ordering] ***********************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring: zookeeper_follower
+
+PLAY [Zookeeper Followers Provisioning] ****************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring: zookeeper_leader
+
+PLAY [Zookeeper Leader Provisioning] *******************************************
+skipping: no hosts matched
+
+PLAY [Kafka Controller Status Finding] *****************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_controller_parallel
+
+PLAY [Kafka Controller Parallel Provisioning] **********************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_controller_serial
+
+PLAY [Kafka Controller Serial Provisioning] ************************************
+skipping: no hosts matched
+
+PLAY [Kafka Broker Status Finding] *********************************************
+
+TASK [Populate service facts] **************************************************
+skipping: [kafka-broker1]
+
+TASK [Determine Installation Pattern - Parallel or Serial] *********************
+skipping: [kafka-broker1]
+
+TASK [Group Hosts by Installation Pattern] *************************************
+skipping: [kafka-broker1]
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_broker_parallel
+
+PLAY [Kafka Broker Parallel Provisioning] **************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring: kafka_broker_serial
+
+PLAY [Kafka Broker Serial Provisioning] ****************************************
+skipping: no hosts matched
+
+PLAY [Kafka Broker Serial Ordering] ********************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_broker_non_controller
+
+PLAY [Kafka Broker Non Controllers Provisioning] *******************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_broker_controller
+
+PLAY [Kafka Broker Controller Provisioning] ************************************
+skipping: no hosts matched
+
+PLAY [Schema Registry Provisioning] ********************************************
+
+TASK [include_role : common] ***************************************************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Gather OS Facts] ********************
+skipping: [schema-registry1] => (item=ansible_os_family)
+skipping: [schema-registry1] => (item=ansible_fqdn)
+
+TASK [Stop Service and Remove Packages on Version Change] **********************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Install the Schema Registry Packages] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Install the Schema Registry Packages] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Schema Registry Group] **************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Check if Schema Registry User Exists] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Schema Registry User] ********
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Copy Schema Registry Service from archive file to system] ***
+skipping: [schema-registry1]
+
+TASK [include_role : ssl] ******************************************************
+skipping: [schema-registry1]
+
+TASK [Configure Kerberos] ******************************************************
+skipping: [schema-registry1]
+
+TASK [Copy Custom Schema Registry Files] ***************************************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Configure RBAC] *********************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Schema Registry Config directory] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Schema Registry Config] ******
+skipping: [schema-registry1]
+
+TASK [Create Schema Registry Config with Secrets Protection] *******************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Logs Directory] **************
+skipping: [schema-registry1]
+
+TASK [Update log4j Config for Log Cleanup] *************************************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Set Permissions on Log4j Conf] ******
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create logredactor rule file directory] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Copy logredactor rule file from control node to component node] ***
+skipping: [schema-registry1]
+
+TASK [Configure logredactor] ***************************************************
+skipping: [schema-registry1] => (item={'logger_name': 'log4j.rootLogger', 'appenderRefs': 'file'})
+
+TASK [confluent.platform.schema_registry : Restart schema registry] ************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Schema Registry Jolokia Config] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Deploy JMX Exporter Config File] ****
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Basic Auth Jaas File] ********
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Basic Auth Password File] ****
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Create Service Override Directory] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Write Service Overrides] ************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Certs were Updated - Trigger Restart] ***
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : meta] *******************************
+[WARNING]: flush_handlers task does not support when conditional
+
+TASK [confluent.platform.schema_registry : Start Schema Registry Service] ******
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Health Check] ***********************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Register Cluster] *******************
+skipping: [schema-registry1]
+
+TASK [confluent.platform.schema_registry : Delete temporary keys/certs when keystore and trustore is provided] ***
+skipping: [schema-registry1] => (item=/var/ssl/private/ca.crt)
+skipping: [schema-registry1] => (item=/var/ssl/private/schema_registry.crt)
+skipping: [schema-registry1] => (item=/var/ssl/private/schema_registry.key)
+
+TASK [Proceed Prompt] **********************************************************
+skipping: [schema-registry1]
+
+PLAY [Kafka Connect Status Finding] ********************************************
+
+TASK [Populate service facts] **************************************************
+skipping: [kafka-connect1]
+
+TASK [Determine Installation Pattern - Parallel or Serial] *********************
+skipping: [kafka-connect1]
+
+TASK [Group Hosts by Installation Pattern] *************************************
+skipping: [kafka-connect1]
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_connect_parallel
+
+PLAY [Kafka Connect Parallel Provisioning] *************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_connect_serial
+
+PLAY [Kafka Connect Serial Provisioning] ***************************************
+skipping: no hosts matched
+
+PLAY [KSQL Status Finding] *****************************************************
+
+TASK [Populate service facts] **************************************************
+skipping: [ksql1]
+
+TASK [Determine Installation Pattern - Parallel or Serial] *********************
+skipping: [ksql1]
+
+TASK [Group Hosts by Installation Pattern] *************************************
+skipping: [ksql1]
+[WARNING]: Could not match supplied host pattern, ignoring: ksql_parallel
+
+PLAY [KSQL Parallel Provisioning] **********************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring: ksql_serial
+
+PLAY [KSQL Serial Provisioning] ************************************************
+skipping: no hosts matched
+
+PLAY [Kafka Rest Status Finding] ***********************************************
+
+TASK [Populate service facts] **************************************************
+skipping: [kafka-rest1]
+
+TASK [Determine Installation Pattern - Parallel or Serial] *********************
+skipping: [kafka-rest1]
+
+TASK [Group Hosts by Installation Pattern] *************************************
+skipping: [kafka-rest1]
+[WARNING]: Could not match supplied host pattern, ignoring: kafka_rest_parallel
+
+PLAY [Kafka Rest Parallel Provisioning] ****************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring: kafka_rest_serial
+
+PLAY [Kafka Rest Serial Provisioning] ******************************************
+skipping: no hosts matched
+
+PLAY [Control Center Status Finding] *******************************************
+
+TASK [Populate service facts] **************************************************
+skipping: [control-center1]
+
+TASK [Determine Installation Pattern - Parallel or Serial] *********************
+skipping: [control-center1]
+
+TASK [Group Hosts by Installation Pattern] *************************************
+skipping: [control-center1]
+[WARNING]: Could not match supplied host pattern, ignoring:
+control_center_parallel
+
+PLAY [Control Center Parallel Provisioning] ************************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+control_center_serial
+
+PLAY [Control Center Serial Provisioning] **************************************
+skipping: no hosts matched
+
+PLAY [Kafka Connect Replicator Status Finding] *********************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_connect_replicator_parallel
+
+PLAY [Kafka Connect Replicator Parallel Provisioning] **************************
+skipping: no hosts matched
+[WARNING]: Could not match supplied host pattern, ignoring:
+kafka_connect_replicator_serial
+
+PLAY [Kafka Connect Replicator Serial Provisioning] ****************************
+skipping: no hosts matched
+
+PLAY RECAP *********************************************************************
+control-center1            : ok=0    changed=0    unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+kafka-broker1              : ok=0    changed=0    unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+kafka-connect1             : ok=0    changed=0    unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+kafka-rest1                : ok=0    changed=0    unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+ksql1                      : ok=0    changed=0    unreachable=0    failed=0    skipped=21   rescued=0    ignored=0
+schema-registry1           : ok=0    changed=0    unreachable=0    failed=0    skipped=53   rescued=0    ignored=0
+zookeeper1                 : ok=0    changed=0    unreachable=0    failed=0    skipped=22   rescued=0    ignored=0
+

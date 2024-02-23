@@ -35,6 +35,32 @@ platforms:
     privileged: true
     networks:
       - name: confluent
+  - name: kafka-broker2
+    hostname: kafka-broker2.confluent
+    groups:
+      - kafka_broker
+      - kafka_broker_migration
+    image: redhat/ubi9-minimal
+    dockerfile: ../Dockerfile-rhel-java17.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent
+  - name: kafka-broker3
+    hostname: kafka-broker3.confluent
+    groups:
+      - kafka_broker
+      - kafka_broker_migration
+    image: redhat/ubi9-minimal
+    dockerfile: ../Dockerfile-rhel-java17.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent
   - name: schema-registry1
     hostname: schema-registry1.confluent
     groups:
@@ -61,32 +87,32 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  - name: kafka-connect1
-    hostname: kafka-connect1.confluent
-    groups:
-      - kafka_connect
-      - kafka_connect_migration
-    image: redhat/ubi9-minimal
-    dockerfile: ../Dockerfile-rhel-java17.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: ksql1
-    hostname: ksql1.confluent
-    groups:
-      - ksql
-      - ksql_migration
-    image: redhat/ubi9-minimal
-    dockerfile: ../Dockerfile-rhel-java17.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
+  # - name: kafka-connect1
+  #   hostname: kafka-connect1.confluent
+  #   groups:
+  #     - kafka_connect
+  #     - kafka_connect_migration
+  #   image: redhat/ubi9-minimal
+  #   dockerfile: ../Dockerfile-rhel-java17.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent
+  # - name: ksql1
+  #   hostname: ksql1.confluent
+  #   groups:
+  #     - ksql
+  #     - ksql_migration
+  #   image: redhat/ubi9-minimal
+  #   dockerfile: ../Dockerfile-rhel-java17.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent
   - name: control-center1
     hostname: control-center1.confluent
     groups:
@@ -122,9 +148,30 @@ provisioner:
     group_vars:
       all:
         sasl_protocol: plain
+        ssl_enabled: true
+        kafka_broker_rest_proxy_enabled: false
         kafka_broker_configure_control_plane_listener: true
+        kafka_broker_custom_listeners:
+          oauth_listener:
+            name: OAUTH_LISTENER
+            port: 9095
+            sasl_protocol: oauth
+          custom_listener:
+            name: custom_LISTENER
+            port: 9094
+          internal:
+            name: INTERNAL
+            sasl_protocol: plain
         zookeeper_custom_properties:
           dataDir: /opt/zookeeper
+        oauth_enabled: true
+        oauth_client_id: "user"
+        oauth_client_password: "password" 
+        oauth_groups_scope: groups
+        oauth_token_uri: https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7/v1/token
+        oauth_issuer_url: https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7
+        oauth_jwks_uri: https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7/v1/keys
+        oauth_expected_audience: Confluent,api://default,https://my-company.com
 
         kafka_broker_custom_client_properties:
           default.api.timeout.ms: 40000
