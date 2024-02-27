@@ -34,26 +34,6 @@
     - kafka_broker_client_secrets_protection_enabled|bool
     - rbac_enabled|bool or confluent_cli_version is version('3.0.0', '>=')
 
-- name: Wait for Metadata Service to start
-  uri:
-    url: "{{mds_http_protocol}}://{{ mds_advertised_listener_hostname | default(hostvars[inventory_hostname]|confluent.platform.resolve_hostname, True) }}:{{mds_port}}/security/1.0/authenticate"
-    validate_certs: false
-    return_content: true
-    status_code: 200
-    url_username: "{{mds_health_check_user}}"
-    url_password: "{{mds_health_check_password}}"
-    force_basic_auth: true
-  register: mds_result
-  until: mds_result.status == 200
-  retries: "{{ mds_retries }}"
-  delay: 5
-  ignore_errors: true
-  when:
-    - rbac_enabled|bool and not external_mds_enabled|bool
-    # Skip if any previous check failed
-    - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False)
-    - not oauth_enabled
-
 - name: get token
   uri:
     url: "https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7/v1/token"
@@ -75,10 +55,29 @@
   retries: 10
   delay: 5
   when:
-    - rbac_enabled|bool and not external_mds_enabled|bool
     - oauth_enabled|bool
 
-- name: get req
+- name: Wait for Metadata Service to start
+  uri:
+    url: "{{mds_http_protocol}}://{{ mds_advertised_listener_hostname | default(hostvars[inventory_hostname]|confluent.platform.resolve_hostname, True) }}:{{mds_port}}/security/1.0/authenticate"
+    validate_certs: false
+    return_content: true
+    status_code: 200
+    url_username: "{{mds_health_check_user}}"
+    url_password: "{{mds_health_check_password}}"
+    force_basic_auth: true
+  register: mds_result
+  until: mds_result.status == 200
+  retries: "{{ mds_retries }}"
+  delay: 5
+  ignore_errors: true
+  when:
+    - rbac_enabled|bool and not external_mds_enabled|bool
+    # Skip if any previous check failed
+    - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False)
+    - not oauth_enabled|bool
+
+- name: Wait for Metadata Service to start
   uri:
     url: "{{mds_http_protocol}}://{{ mds_advertised_listener_hostname | default(hostvars[inventory_hostname]|confluent.platform.resolve_hostname, True) }}:{{mds_port}}/security/1.0/authenticate"
     validate_certs: false
@@ -89,14 +88,34 @@
       Authorization: "Bearer {{(mds_token.content | from_json).access_token}}"
   register: mds_result
   until: mds_result.status == 200
-  retries: 10
+  retries: "{{ mds_retries }}"
   delay: 5
+  ignore_errors: true
   when:
-      - rbac_enabled|bool and not external_mds_enabled|bool
-      - oauth_enabled|bool
+    - rbac_enabled|bool and not external_mds_enabled|bool
+    # Skip if any previous check failed
+    - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False)
+    - oauth_enabled|bool
 
-- debug:
-    msg: "{{mds_result}}"
+- name: Wait for Embedded Rest Proxy to start
+  uri:
+    url: "{{kafka_broker_erp_clusters_url}}"
+    validate_certs: false
+    return_content: true
+    status_code: 200
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{(mds_token.content | from_json).access_token}}"
+  register: erp_result
+  until: erp_result.status == 200
+  retries: "{{ mds_retries }}"
+  delay: 5
+  ignore_errors: true
+  when:
+    - oauth_enabled|bool
+    - kafka_broker_rest_proxy_enabled|bool
+    # Skip if any previous checks failed
+    - not urp_topics.failed|default(False) and not urp_topics_secrets_protection.failed|default(False) and not mds_result.failed|default(False)
 
 - name: Wait for Embedded Rest Proxy to start
   uri:
