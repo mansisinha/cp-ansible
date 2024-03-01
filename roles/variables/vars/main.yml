@@ -517,7 +517,7 @@ kafka_broker_properties:
     properties:
       authorizer.class.name: io.confluent.kafka.security.authorizer.ConfluentServerAuthorizer
       confluent.authorizer.access.rule.providers: CONFLUENT,{{ "ZK_ACL" if ((not kraft_enabled|bool) or kraft_migration|bool) else "KRAFT_ACL" }}
-      super.users: "User:{{ mds_super_user|default('mds') }}"
+      super.users: "User:{{ mds_super_user|default('mds') }};User:{{ oauth_client_id }}"
   rbac_mds:
     enabled: "{{ rbac_enabled and not external_mds_enabled }}"
     properties:
@@ -632,9 +632,9 @@ kafka_broker_properties:
                     'kafka.rest.client.', kafka_broker_truststore_path, kafka_broker_truststore_storepass, False, kafka_broker_keystore_path, kafka_broker_keystore_storepass, kafka_broker_keystore_keypass,
                     false, sasl_plain_users_final.admin.principal, sasl_plain_users_final.admin.password, sasl_scram_users_final.admin.principal, sasl_scram_users_final.admin.password, sasl_scram256_users_final.admin.principal, sasl_scram256_users_final.admin.password,
                     kerberos_kafka_broker_primary, kafka_broker_keytab_path, kafka_broker_kerberos_principal|default('kafka'),
-                    true, kafka_broker_ldap_user, kafka_broker_ldap_password, mds_bootstrap_server_urls, false, oauth_client_id, oauth_client_password, oauth_groups_scope, oauth_token_uri) }}"
+                    false, kafka_broker_ldap_user, kafka_broker_ldap_password, mds_bootstrap_server_urls, oauth_enabled, oauth_client_id, oauth_client_password, oauth_groups_scope, oauth_token_uri) }}"
   embedded_rest_proxy_rbac:
-    enabled: "{{ kafka_broker_rest_proxy_enabled and rbac_enabled }}"
+    enabled: "{{ kafka_broker_rest_proxy_enabled and rbac_enabled and not oauth_enabled }}"
     properties:
       kafka.rest.kafka.rest.resource.extension.class: io.confluent.kafkarest.security.KafkaRestSecurityResourceExtension
       kafka.rest.rest.servlet.initializor.classes: io.confluent.common.security.jetty.initializer.InstallBearerOrBasicSecurityHandler
@@ -796,7 +796,7 @@ schema_registry_properties:
                     'kafkastore.', schema_registry_truststore_path, schema_registry_truststore_storepass, public_certificates_enabled, schema_registry_keystore_path, schema_registry_keystore_storepass, schema_registry_keystore_keypass,
                     false, sasl_plain_users_final.schema_registry.principal, sasl_plain_users_final.schema_registry.password, sasl_scram_users_final.schema_registry.principal, sasl_scram_users_final.schema_registry.password, sasl_scram256_users_final.schema_registry.principal, sasl_scram256_users_final.schema_registry.password,
                     kerberos_kafka_broker_primary, schema_registry_keytab_path, schema_registry_kerberos_principal|default('kafka'),
-                    false, schema_registry_ldap_user, schema_registry_ldap_password, mds_bootstrap_server_urls, false, oauth_client_id, oauth_client_password, oauth_groups_scope, oauth_token_uri) }}"
+                    false, schema_registry_ldap_user, schema_registry_ldap_password, mds_bootstrap_server_urls, oauth_enabled, oauth_client_id, oauth_client_password, oauth_groups_scope, oauth_token_uri) }}"
   rbac:
     enabled: "{{rbac_enabled}}"
     properties:
@@ -1178,7 +1178,7 @@ ksql_properties:
                             'confluent.monitoring.interceptor.', ksql_truststore_path, ksql_truststore_storepass, public_certificates_enabled, ksql_keystore_path, ksql_keystore_storepass, ksql_keystore_keypass,
                             false, sasl_plain_users_final.ksql.principal, sasl_plain_users_final.ksql.password, sasl_scram_users_final.ksql.principal, sasl_scram_users_final.ksql.password, sasl_scram256_users_final.ksql.principal, sasl_scram256_users_final.ksql.password,
                             kerberos_kafka_broker_primary, ksql_keytab_path, ksql_kerberos_principal|default('ksql'),
-                            false, ksql_ldap_user, ksql_ldap_password, mds_bootstrap_server_urls, ksql, oauth_client_id, oauth_client_password, oauth_groups_scope, oauth_token_uri) }}"
+                            false, ksql_ldap_user, ksql_ldap_password, mds_bootstrap_server_urls, false, oauth_client_id, oauth_client_password, oauth_groups_scope, oauth_token_uri) }}"
   rbac:
     enabled: "{{rbac_enabled}}"
     properties:
