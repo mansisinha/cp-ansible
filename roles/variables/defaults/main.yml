@@ -1454,6 +1454,8 @@ sso_refresh_token: true
 
 oauth_enabled: false
 
+ldap_with_oauth_enabled: false
+
 oauth_client_id: none
 
 oauth_client_password: none

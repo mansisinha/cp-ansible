@@ -530,7 +530,7 @@ kafka_broker_properties:
   rbac_mds_oauth:
     enabled: "{{ rbac_enabled and not external_mds_enabled and oauth_enabled }}"
     properties:
-      confluent.metadata.server.user.store: OAUTH
+      confluent.metadata.server.user.store: "{{ 'LDAP_WITH_OAUTH' if ldap_with_oauth_enabled|bool else 'OAUTH' }}"
       confluent.metadata.server.oauthbearer.jwks.endpoint.url: "{{oauth_jwks_uri}}"
       confluent.metadata.server.oauthbearer.expected.issuer: "{{oauth_issuer_url}}"
       confluent.metadata.server.oauthbearer.expected.audience: "{{oauth_expected_audience}}"
