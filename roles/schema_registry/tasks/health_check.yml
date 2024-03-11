@@ -14,7 +14,45 @@
   until: result1.status == 200
   retries: 30
   delay: 5
-  when: schema_registry_authentication_type != 'mtls'
+  when: schema_registry_authentication_type != 'mtls' and not oauth_enabled
+  ignore_errors: true
+
+- name: get token
+  uri:
+    url: "https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7/v1/token"
+    method: POST
+    validate_certs: false
+    return_content: true
+    status_code: 200
+    url_username: "0oa96pg3lgnBnhY9w5d7"
+    url_password: "dshcfgYYnMWhFGIuLzNFQJPhichIRUHgYz9jjRKZLjTV0s97Jueji_8tIjfzExWH"
+    force_basic_auth: true
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    body_format: form-urlencoded
+    body:
+      - ["grant_type", "client_credentials"]
+      - ["scope", "groups"]
+  register: mds_token
+  until: mds_token.status == 200
+  retries: 10
+  delay: 5
+  when:
+    - oauth_enabled|bool
+
+- name: Wait for API to return 200
+  uri:
+    url: "{{schema_registry_http_protocol}}://{{ hostvars[inventory_hostname]|confluent.platform.resolve_hostname }}:{{schema_registry_listener_port}}/subjects"
+    status_code: 200
+    validate_certs: false
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{(mds_token.content | from_json).access_token}}"
+  register: result1
+  until: result1.status == 200
+  retries: 30
+  delay: 5
+  when: schema_registry_authentication_type != 'mtls' and oauth_enabled
   ignore_errors: true
 
 - set_fact:

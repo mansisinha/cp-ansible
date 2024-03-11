@@ -98,19 +98,19 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-#   - name: schema-registry1
-#     hostname: schema-registry1.confluent
-#     groups:
-#       - schema_registry
-#       - schema_registry_migration
-#     image: oraclelinux:8-slim
-#     dockerfile: ../Dockerfile-rhel-java8.j2
-#     command: ""
-#     volumes:
-#       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-#     privileged: true
-#     networks:
-#       - name: confluent
+  - name: schema-registry1
+    hostname: schema-registry1.confluent
+    groups:
+      - schema_registry
+      - schema_registry_migration
+    image: oraclelinux:8-slim
+    dockerfile: ../Dockerfile-rhel-java8.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent
 #   - name: kafka-rest1
 #     hostname: kafka-rest1.confluent
 #     groups:
@@ -208,16 +208,17 @@ provisioner:
   inventory:
     group_vars:
       all:
-        ssl_enabled: true
-        ssl_mutual_auth_enabled: true
-        kafka_broker_rest_proxy_enabled: false
+        #ssl_enabled: true
+        sasl_protocol: plain
+        # ssl_mutual_auth_enabled: true
+        # kafka_broker_rest_proxy_enabled: false
         rbac_enabled: true
         rbac_component_additional_system_admins:
           - User:user1
-        cluster_id_source: zookeeper
+
         oauth_enabled: true
-        oauth_client_id: "user"
-        oauth_client_password: "password" 
+        oauth_client_id: "0oa96pg3lgnBnhY9w5d7"
+        oauth_client_password: "dshcfgYYnMWhFGIuLzNFQJPhichIRUHgYz9jjRKZLjTV0s97Jueji_8tIjfzExWH" 
         oauth_groups_scope: groups
         oauth_token_uri: https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7/v1/token
         oauth_issuer_url: https://dev-59009577.okta.com/oauth2/aus96p2og3u7Cpwu65d7
@@ -231,7 +232,11 @@ provisioner:
 
         mds_super_user: mds
         mds_super_user_password: password
-
+        schema_registry_ldap_user: "0oa96pg3lgnBnhY9w5d7"
+        
+        schema_registry_ldap_password: "dshcfgYYnMWhFGIuLzNFQJPhichIRUHgYz9jjRKZLjTV0s97Jueji_8tIjfzExWH"
+        schema_registry_oauth_user:  "0oa96pg3lgnBnhY9w5d7"
+        schema_registry_oauth_password: "dshcfgYYnMWhFGIuLzNFQJPhichIRUHgYz9jjRKZLjTV0s97Jueji_8tIjfzExWH"
         # kafka_broker_custom_properties:
         #   ldap.java.naming.factory.initial: com.sun.jndi.ldap.LdapCtxFactory
         #   ldap.com.sun.jndi.ldap.read.timeout: 3000

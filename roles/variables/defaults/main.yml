@@ -1496,10 +1496,22 @@ kafka_broker_ldap_user: "{{mds_super_user}}"
 kafka_broker_ldap_password: "{{mds_super_user_password}}"
 
 ### LDAP User for Kafkas Embedded Rest Service to authenticate as
+kafka_broker_oauth_user: "{{oauth_client_id}}"
+
+### Password to kafka_broker_ldap_user LDAP User
+kafka_broker_oauth_password: "{{oauth_client_password}}"
+
+### LDAP User for Kafkas Embedded Rest Service to authenticate as
 kafka_controller_ldap_user: "{{mds_super_user}}"
 
 ### Password to kafka_controller_ldap_user LDAP User
 kafka_controller_ldap_password: "{{mds_super_user_password}}"
+
+### LDAP User for Kafkas Embedded Rest Service to authenticate as
+kafka_controller_oauth_user: "{{oauth_client_id}}"
+
+### Password to kafka_controller_ldap_user LDAP User
+kafka_controller_oauth_password: "{{oauth_client_password}}"
 
 ### Unique advertised hostname for Metadata Server
 mds_advertised_listener_hostname: ""
@@ -1510,11 +1522,23 @@ schema_registry_ldap_user: schema-registry
 ### Password to schema_registry_ldap_user LDAP User
 schema_registry_ldap_password: password
 
+### LDAP User for Schema Registry to authenticate as
+schema_registry_oauth_user: schema-registry
+
+### Password to schema_registry_ldap_user LDAP User
+schema_registry_oauth_password: password
+
 ### LDAP User for Connect to authenticate as
 kafka_connect_ldap_user: connect
 
 ### Password to kafka_connect_ldap_user LDAP User
 kafka_connect_ldap_password: password
+
+### LDAP User for Connect to authenticate as
+kafka_connect_oauth_user: connect
+
+### Password to kafka_connect_ldap_user LDAP User
+kafka_connect_oauth_password: password
 
 ### LDAP User for ksqlDB to authenticate as
 ksql_ldap_user: ksql
@@ -1528,11 +1552,23 @@ kafka_rest_ldap_user: kafka-rest
 ### Password to kafka_rest_ldap_user LDAP User
 kafka_rest_ldap_password: password
 
+### LDAP User for Rest Proxy to authenticate as
+kafka_rest_oauth_user: kafka-rest
+
+### Password to kafka_rest_ldap_user LDAP User
+kafka_rest_oauth_password: password
+
 ### LDAP User for Control Center to authenticate as
 control_center_ldap_user: control-center
 
 ### Password to control_center_ldap_user LDAP User
 control_center_ldap_password: password
+
+### LDAP User for Control Center to authenticate as
+control_center_oauth_user: control-center
+
+### Password to control_center_ldap_user LDAP User
+control_center_oauth_password: password
 
 ### LDAP User for Confluent Replicator to authenticate as
 kafka_connect_replicator_ldap_user: replicator

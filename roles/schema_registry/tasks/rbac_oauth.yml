@@ -56,7 +56,7 @@
 
 - name: Grant Schema Registry user the role SecurityAdmin on the Schema Registry cluster
   uri:
-    url: "{{mds_bootstrap_server_urls.split(',')[0]}}/security/1.0/principals/User:{{schema_registry_ldap_user}}/roles/SecurityAdmin"
+    url: "{{mds_bootstrap_server_urls.split(',')[0]}}/security/1.0/principals/User:{{schema_registry_oauth_user}}/roles/SecurityAdmin"
     method: POST
     validate_certs: false
     headers:
@@ -79,7 +79,7 @@
 
 - name: Grant Schema Registry user ResourceOwner Schema Registry Group and Topic
   uri:
-    url: "{{mds_bootstrap_server_urls.split(',')[0]}}/security/1.0/principals/User:{{schema_registry_ldap_user}}/roles/ResourceOwner/bindings"
+    url: "{{mds_bootstrap_server_urls.split(',')[0]}}/security/1.0/principals/User:{{schema_registry_oauth_user}}/roles/ResourceOwner/bindings"
     method: POST
     validate_certs: false
     headers:
