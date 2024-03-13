@@ -517,7 +517,7 @@ kafka_broker_properties:
     properties:
       authorizer.class.name: io.confluent.kafka.security.authorizer.ConfluentServerAuthorizer
       confluent.authorizer.access.rule.providers: CONFLUENT,{{ "ZK_ACL" if ((not kraft_enabled|bool) or kraft_migration|bool) else "KRAFT_ACL" }}
-      super.users: "{% if not oauth_enabled|bool %}User:{{mds_super_user|default('mds')}}{% elif (oauth_enabled|bool and ldap_with_oauth_enabled|bool) %}User:{{mds_super_user|default('mds')}},User:{{oauth_client_id}}{% else %}User:{{oauth_client_id }}{% endif %}"
+      super.users: "{% if not oauth_enabled|bool %}User:{{mds_super_user|default('mds')}}{% elif (oauth_enabled|bool and ldap_with_oauth_enabled|bool) %}User:{{mds_super_user|default('mds')}};User:{{oauth_client_id}}{% else %}User:{{oauth_client_id }}{% endif %}"
   rbac_mds:
     enabled: "{{ rbac_enabled and not external_mds_enabled }}"
     properties:
@@ -798,33 +798,32 @@ schema_registry_properties:
                     kerberos_kafka_broker_primary, schema_registry_keytab_path, schema_registry_kerberos_principal|default('kafka'),
                     false, schema_registry_ldap_user, schema_registry_ldap_password, mds_bootstrap_server_urls, oauth_enabled, oauth_client_id, oauth_client_password, oauth_groups_scope, oauth_token_uri) }}"
   rbac:
-    enabled: "{{rbac_enabled and not oauth_enabled}}"
+    enabled: "{{ rbac_enabled }}"
     properties:
       schema.registry.resource.extension.class: io.confluent.kafka.schemaregistry.security.SchemaRegistrySecurityResourceExtension
       confluent.schema.registry.authorizer.class: io.confluent.kafka.schemaregistry.security.authorizer.rbac.RbacAuthorizer
-      rest.servlet.initializor.classes: io.confluent.common.security.jetty.initializer.InstallBearerOrBasicSecurityHandler
       confluent.schema.registry.auth.mechanism: JETTY_AUTH
       public.key.path: "{{rbac_enabled_public_pem_path}}"
       authentication.roles: "**"
       confluent.metadata.bootstrap.server.urls: "{{mds_bootstrap_server_urls}}"
+      rest.servlet.initializor.classes: io.confluent.common.security.jetty.initializer.AuthenticationHandler
+  rbac_ldap:
+    enabled: "{{rbac_enabled and ( not oauth_enabled or (oauth_enabled and ldap_with_oauth_enabled))}}"
+    properties:
       confluent.metadata.http.auth.credentials.provider: BASIC
       confluent.metadata.basic.auth.user.info: "{{ schema_registry_ldap_user | default('MISSING') }}:{{ schema_registry_ldap_password | default('MISSING')}}"
   rbac_oauth:
     enabled: "{{rbac_enabled and oauth_enabled}}"
     properties:
-      schema.registry.resource.extension.class: io.confluent.kafka.schemaregistry.security.SchemaRegistrySecurityResourceExtension
-      confluent.schema.registry.authorizer.class: io.confluent.kafka.schemaregistry.security.authorizer.rbac.RbacAuthorizer
-      rest.servlet.initializor.classes: io.confluent.common.security.jetty.initializer.AuthenticationHandler
-      confluent.schema.registry.auth.mechanism: JETTY_AUTH
-      public.key.path: "{{rbac_enabled_public_pem_path}}"
-      authentication.roles: "**"
-      confluent.metadata.bootstrap.server.urls: "{{mds_bootstrap_server_urls}}"
       confluent.metadata.oauthbearer.login.client.id: "{{schema_registry_oauth_user}}"
       confluent.metadata.oauthbearer.login.client.secret: "{{schema_registry_oauth_password}}"
       confluent.metadata.oauthbearer.token.endpoint.url: "{{ oauth_token_uri }}"
       confluent.metadata.oauthbearer.login.credentials.source: OAUTHBEARER
       confluent.metadata.http.auth.credentials.provider: OAUTHBEARER
       confluent.metadata.oauthbearer.login.oauth.scope: "{{oauth_groups_scope}}"
+  sr_oauth:
+    enabled: "{{schema_registry_oauth_enabled}}"
+    properties:
       oauthbearer.jwks.endpoint.url: "{{oauth_jwks_uri}}"
       oauthbearer.groups.claim.name: "{{ oauth_groups_scope }}"
       oauthbearer.sub.claim.name: "{{ oauth_sub_claim }}"

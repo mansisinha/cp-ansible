@@ -806,6 +806,8 @@ schema_registry_cluster_name: ""
 ### Boolean used for disabling of systemd service restarts when rootless install is executed
 schema_registry_skip_restarts: "{{ skip_restarts }}"
 
+schema_registry_oauth_enabled: "{{ oauth_enabled }}"
+
 #### Kafka Rest Variables ####
 
 ### Default Kafka Rest config prefix. Only valid to customize when installation_method: archive
@@ -902,6 +904,8 @@ kafka_rest_monitoring_interceptors_enabled: "{{ monitoring_interceptors_enabled 
 
 ### Boolean used for disabling of systemd service restarts when rootless install is executed
 kafka_rest_skip_restarts: "{{ skip_restarts }}"
+
+kafka_rest_oauth_enabled: "{{ oauth_enabled }}"
 
 # Kafka Connect Variables
 
@@ -1050,6 +1054,7 @@ kafka_connect_connector_white_list: ""
 ### Boolean used for disabling of systemd service restarts when rootless install is executed
 kafka_connect_skip_restarts: "{{ skip_restarts }}"
 
+kafka_connect_oauth_enabled: "{{ oauth_enabled }}"
 #### KSQLDB Variables ####
 
 ### Default KSQLDB config prefix. Only valid to customize when installation_method: archive
@@ -1228,6 +1233,8 @@ control_center_custom_properties: {}
 
 ### Boolean used for disabling of systemd service restarts when rootless install is executed
 control_center_skip_restarts: "{{ skip_restarts }}"
+
+control_center_oauth_enabled: "{{ oauth_enabled }}"
 
 # Hash merging not working with new approach
 _sasl_scram_users: "{

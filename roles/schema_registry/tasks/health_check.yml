@@ -14,7 +14,7 @@
   until: result1.status == 200
   retries: 30
   delay: 5
-  when: schema_registry_authentication_type != 'mtls' and not oauth_enabled
+  when: schema_registry_authentication_type != 'mtls' and not schema_registry_oauth_enabled
   ignore_errors: true
 
 - name: get token
@@ -38,7 +38,7 @@
   retries: 10
   delay: 5
   when:
-    - oauth_enabled|bool
+    - schema_registry_oauth_enabled|bool
 
 - name: Wait for API to return 200
   uri:
@@ -52,7 +52,7 @@
   until: result1.status == 200
   retries: 30
   delay: 5
-  when: schema_registry_authentication_type != 'mtls' and oauth_enabled
+  when: schema_registry_authentication_type != 'mtls' and schema_registry_oauth_enabled
   ignore_errors: true
 
 - set_fact:
