@@ -37,6 +37,7 @@
   until: mds_token.status == 200
   retries: 10
   delay: 5
+  no_log: "{{mask_secrets|bool}}"
   when:
     - schema_registry_oauth_enabled|bool
 
@@ -53,6 +54,7 @@
   retries: 30
   delay: 5
   when: schema_registry_authentication_type != 'mtls' and schema_registry_oauth_enabled
+  no_log: "{{mask_secrets|bool}}"
   ignore_errors: true
 
 - set_fact:

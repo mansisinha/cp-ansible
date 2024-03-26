@@ -824,6 +824,8 @@ schema_registry_properties:
   sr_oauth:
     enabled: "{{schema_registry_oauth_enabled}}"
     properties:
+      authentication.roles: "**"
+      rest.servlet.initializor.classes: io.confluent.common.security.jetty.initializer.AuthenticationHandler
       oauthbearer.jwks.endpoint.url: "{{oauth_jwks_uri}}"
       oauthbearer.groups.claim.name: "{{ oauth_groups_scope }}"
       oauthbearer.sub.claim.name: "{{ oauth_sub_claim }}"
