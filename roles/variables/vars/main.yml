@@ -604,12 +604,12 @@ kafka_broker_properties:
       kafka.rest.authentication.realm: KafkaRest
       kafka.rest.authentication.roles: "{{ kafka_broker_rest_proxy_basic_users | confluent.platform.get_roles | unique | join(',') }}"
   embedded_rest_proxy_client_bootstrap:
-    enabled: "{{ kafka_broker_rest_proxy_enabled }}"
+    enabled: "{{ kafka_broker_rest_proxy_enabled and rbac_enabled }}"
     properties:
       # Internal listener will be the token listener when rbac is enabled
       kafka.rest.bootstrap.servers: "{{ groups['kafka_broker'] | default(['localhost']) | confluent.platform.resolve_hostnames(hostvars) | join(':' + kafka_broker_listeners['internal']['port']|string + ',') }}:{{kafka_broker_listeners['internal']['port']}}"
   embedded_rest_proxy_client:
-    enabled: "{{ kafka_broker_rest_proxy_enabled }}"
+    enabled: "{{ kafka_broker_rest_proxy_enabled and rbac_enabled }}"
     properties: "{{ kafka_broker_listeners['internal'] | confluent.platform.client_properties(ssl_enabled, fips_enabled, ssl_mutual_auth_enabled, sasl_protocol,
                     'kafka.rest.client.', kafka_broker_truststore_path, kafka_broker_truststore_storepass, False, kafka_broker_keystore_path, kafka_broker_keystore_storepass, kafka_broker_keystore_keypass,
                     false, sasl_plain_users_final.admin.principal, sasl_plain_users_final.admin.password, sasl_scram_users_final.admin.principal, sasl_scram_users_final.admin.password, sasl_scram256_users_final.admin.principal, sasl_scram256_users_final.admin.password,
