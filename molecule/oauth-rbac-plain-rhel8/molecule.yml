@@ -38,32 +38,32 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  - name: ${KRAFT_CONTROLLER:-zookeeper}2
-    hostname: ${KRAFT_CONTROLLER:-zookeeper}2.confluent
-    groups:
-      - ${CONTROLLER_HOSTGROUP:-zookeeper}
-      - ${CONTROLLER_HOSTGROUP:-zookeeper}_migration
-    image: oraclelinux:8-slim
-    dockerfile: ../Dockerfile-rhel-java8.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: ${KRAFT_CONTROLLER:-zookeeper}3
-    hostname: ${KRAFT_CONTROLLER:-zookeeper}3.confluent
-    groups:
-      - ${CONTROLLER_HOSTGROUP:-zookeeper}
-      - ${CONTROLLER_HOSTGROUP:-zookeeper}_migration
-    image: oraclelinux:8-slim
-    dockerfile: ../Dockerfile-rhel-java8.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
+  # - name: ${KRAFT_CONTROLLER:-zookeeper}2
+  #   hostname: ${KRAFT_CONTROLLER:-zookeeper}2.confluent
+  #   groups:
+  #     - ${CONTROLLER_HOSTGROUP:-zookeeper}
+  #     - ${CONTROLLER_HOSTGROUP:-zookeeper}_migration
+  #   image: oraclelinux:8-slim
+  #   dockerfile: ../Dockerfile-rhel-java8.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent
+  # - name: ${KRAFT_CONTROLLER:-zookeeper}3
+  #   hostname: ${KRAFT_CONTROLLER:-zookeeper}3.confluent
+  #   groups:
+  #     - ${CONTROLLER_HOSTGROUP:-zookeeper}
+  #     - ${CONTROLLER_HOSTGROUP:-zookeeper}_migration
+  #   image: oraclelinux:8-slim
+  #   dockerfile: ../Dockerfile-rhel-java8.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent
   - name: kafka-broker1
     hostname: kafka-broker1.confluent
     groups:
@@ -77,32 +77,32 @@ platforms:
     privileged: true
     networks:
       - name: confluent
-  - name: kafka-broker2
-    hostname: kafka-broker2.confluent
-    groups:
-      - kafka_broker
-      - kafka_broker_migration
-    image: oraclelinux:8-slim
-    dockerfile: ../Dockerfile-rhel-java8.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
-  - name: kafka-broker3
-    hostname: kafka-broker3.confluent
-    groups:
-      - kafka_broker
-      - kafka_broker_migration
-    image: oraclelinux:8-slim
-    dockerfile: ../Dockerfile-rhel-java8.j2
-    command: ""
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    networks:
-      - name: confluent
+  # - name: kafka-broker2
+  #   hostname: kafka-broker2.confluent
+  #   groups:
+  #     - kafka_broker
+  #     - kafka_broker_migration
+  #   image: oraclelinux:8-slim
+  #   dockerfile: ../Dockerfile-rhel-java8.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent
+  # - name: kafka-broker3
+  #   hostname: kafka-broker3.confluent
+  #   groups:
+  #     - kafka_broker
+  #     - kafka_broker_migration
+  #   image: oraclelinux:8-slim
+  #   dockerfile: ../Dockerfile-rhel-java8.j2
+  #   command: ""
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   networks:
+  #     - name: confluent
   - name: schema-registry1
     hostname: schema-registry1.confluent
     groups:
@@ -142,34 +142,34 @@ platforms:
   #   privileged: true
   #   networks:
   #     - name: confluent
-  # - name: ksql1
-  #   hostname: ksql1.confluent
-  #   groups:
-  #     - ksql
-  #     - ksql_migration
-  #   image: oraclelinux:8-slim
-  #   dockerfile: ../Dockerfile-rhel-java8.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   networks:
-  #     - name: confluent
-  # - name: control-center1
-  #   hostname: control-center1.confluent
-  #   groups:
-  #     - control_center
-  #     - control_center_migration
-  #   image: oraclelinux:8-slim
-  #   dockerfile: ../Dockerfile-rhel-java8.j2
-  #   command: ""
-  #   volumes:
-  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  #   privileged: true
-  #   published_ports:
-  #     - "9021:9021"
-  #   networks:
-  #     - name: confluent
+  - name: ksql1
+    hostname: ksql1.confluent
+    groups:
+      - ksql
+      - ksql_migration
+    image: oraclelinux:8-slim
+    dockerfile: ../Dockerfile-rhel-java8.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - name: confluent
+  - name: control-center1
+    hostname: control-center1.confluent
+    groups:
+      - control_center
+      - control_center_migration
+    image: oraclelinux:8-slim
+    dockerfile: ../Dockerfile-rhel-java8.j2
+    command: ""
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    published_ports:
+      - "9021:9021"
+    networks:
+      - name: confluent
     # Cluster 2 (Kraft) goups, groupnames will be changed during converge phase
   # - name: controller1-mig
   #   hostname: controller1-mig.confluent
@@ -219,12 +219,12 @@ provisioner:
         rbac_enabled: true
         rbac_component_additional_system_admins:
           - user1
-
+        ksql_kafka_listener_name: client_listener
         kafka_broker_custom_listeners:
           client_listener:
             name: CLIENT
             port: 9093
-
+        ksql_principal: ksql
         oauth_enabled: true
         oauth_client_id: superuser
         oauth_client_password: my-secret
@@ -238,4 +238,14 @@ provisioner:
         schema_registry_oauth_password: my-secret
         kafka_rest_oauth_user: kafka_rest
         kafka_rest_oauth_password: my-secret
+        control_center_oauth_user: control_center
+        control_center_oauth_password: my-secret
         mask_secrets: false
+        sso_groups_claim: groups
+        sso_sub_claim: sub
+        sso_issuer_url: http://ec2-35-166-19-61.us-west-2.compute.amazonaws.com:8080/auth/realms/cpsso
+        sso_jwks_uri: http://ec2-35-166-19-61.us-west-2.compute.amazonaws.com:8080/auth/realms/cpsso/protocol/openid-connect/certs
+        sso_authorize_uri: http://ec2-35-166-19-61.us-west-2.compute.amazonaws.com:8080/auth/realms/cpsso/protocol/openid-connect/auth
+        sso_token_uri: http://ec2-35-166-19-61.us-west-2.compute.amazonaws.com:8080/auth/realms/cpsso/protocol/openid-connect/token
+        sso_client_id: ${KEYCLOAK_CLIENT:-user}
+        sso_client_password: ${KEYCLOAK_PASSWORD:-pass}

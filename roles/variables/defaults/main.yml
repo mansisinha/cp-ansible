@@ -1548,7 +1548,7 @@ schema_registry_oauth_user: schema-registry
 schema_registry_oauth_password: password
 
 ### Service principal for SR client in Idp server. Defaults to SR client
-schema_registry_oauth_principal: "{{ schema_registry_oauth_user }}"
+schema_registry_principal: "{{ schema_registry_oauth_user }}"
 
 ### LDAP User for Connect to authenticate as
 kafka_connect_ldap_user: connect
@@ -1563,13 +1563,16 @@ kafka_connect_oauth_user: connect
 kafka_connect_oauth_password: password
 
 ### Service principal for Connect client in Idp server. Defaults to Connect client
-kafka_connect_oauth_principal: "{{ kafka_connect_oauth_user }}"
+kafka_connect_principal: "{{ kafka_connect_oauth_user }}"
 
 ### LDAP User for ksqlDB to authenticate as
 ksql_ldap_user: ksql
 
 ### Password to ksql_ldap_user LDAP User
 ksql_ldap_password: password
+
+### Service principal for ksql. Defaults to LDAP user.
+ksql_principal: "{{ ksql_ldap_user }}"
 
 ### LDAP User for Rest Proxy to authenticate as
 kafka_rest_ldap_user: kafka-rest
@@ -1584,7 +1587,7 @@ kafka_rest_oauth_user: kafka-rest
 kafka_rest_oauth_password: password
 
 ### Service principal for Rest Proxy client in Idp server. Defaults to Rest proxy client
-kafka_rest_oauth_principal: "{{ kafka_rest_oauth_user }}"
+kafka_rest_principal: "{{ kafka_rest_oauth_user }}"
 
 ### LDAP User for Control Center to authenticate as
 control_center_ldap_user: control-center
@@ -1599,7 +1602,7 @@ control_center_oauth_user: control-center
 control_center_oauth_password: password
 
 ### Service principal for Control Center client in Idp server. Defaults to Control Center client
-control_center_oauth_principal: "{{ control_center_oauth_user }}"
+control_center_principal: "{{ control_center_oauth_user }}"
 
 ### LDAP User for Confluent Replicator to authenticate as
 kafka_connect_replicator_ldap_user: replicator
